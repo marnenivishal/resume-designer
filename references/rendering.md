@@ -70,6 +70,26 @@ dev machine. CSS naming them renders a fallback **with no error**. Never trust t
 stack — `ats_check.py` reads the fonts *actually embedded* and warns when the
 requested family is missing.
 
+### CSS generated content is NOT invisible to parsers `[MEASURED]`
+
+Tempting assumption, and false. `::before`/`::after` content and CSS counters are
+rendered as **real glyphs** and land in the extracted text exactly like authored text:
+
+```css
+.contact span + span::before { content: "·"; }   /* -> "a@b.com · 555-0100 · Seattle" */
+h2::before { content: counter(sec, decimal-leading-zero); }  /* -> "01 EXPERIENCE" */
+li::before { content: "\2022"; }                  /* -> "• Bullet one" */
+```
+
+All three appear in the stream. Consequences:
+
+- Contact separators **do** reach the parser. Harmless — `·` round-trips through
+  ToUnicode cleanly and contact parsers strip punctuation — but not "invisible".
+  Two comments in this repo asserted otherwise until it was measured.
+- **Never reach for `::before` to hide something from a parser.** It does not work.
+- The only genuinely non-extracting pseudo-element is one with `content: ""` — a rule,
+  a tick, a bar. Safe because it is *empty*, not because it is generated.
+
 ### Figures `[MEASURED]`
 
 Georgia, Corbel, Candara, Constantia, Sitka default to **old-style figures** (digits

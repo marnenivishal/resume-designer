@@ -348,6 +348,19 @@ def matrix() -> list[tuple[str, dict]]:
         experience=[job("Engineer", "Northwind", "2021", "2024", B_ENG[:2])],
         education=[EDU_BS]))
 
+    # --- presets -------------------------------------------------------------
+    # One per family. Rendering is not the bar -- a preset that renders but bleeds
+    # is still broken, so every family gets parse-checked like anything else.
+    # (gallery.py --verify covers all 107; this keeps the default suite quick.)
+    for p in ("material-blue", "signature-teal", "modern-navy", "modern-bar-forest",
+              "editorial-burgundy", "classic-ink", "compact-slate", "minimal-graphite",
+              "executive-oxblood", "technical-cobalt", "warm-rust", "nordic-steel",
+              "banded-navy"):
+        d = R("Maya Ellison", "Senior Backend Engineer", config={"max_pages": 2},
+              **base_senior)
+        d["_preset"] = p
+        add(f"preset-{p}", d)
+
     return S
 
 
@@ -358,11 +371,14 @@ def run_one(item: tuple[str, dict], outdir: Path, fit: bool) -> dict:
     import yaml
     d = outdir / name
     d.mkdir(parents=True, exist_ok=True)
+    preset = data.pop("_preset", None)
     y = d / "resume.yaml"
     y.write_text(yaml.dump(data, sort_keys=False, allow_unicode=True), encoding="utf-8")
 
     cmd = [sys.executable, str(BUILD), str(y), "--format", "pdf,docx,txt",
            "--out", str(d), "--quiet"]
+    if preset:
+        cmd += ["--preset", preset]
     if fit:
         cmd.append("--fit")
     b = subprocess.run(cmd, capture_output=True, text=True, timeout=300)

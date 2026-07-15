@@ -36,9 +36,14 @@
   font-size: var(--fs-meta);
   color: var(--c-muted);
 }
-/* Separator drawn with a pseudo-element so it is decoration, not data: it never
-   lands in the extracted text, so a parser reading the contact line sees
-   "jane@x.com  555-0100  Seattle" rather than characters it has to strip. */
+/* Separator via a pseudo-element so it is not authored into the data -- but be
+   clear about what that does and does not buy you.
+   MEASURED: CSS generated content IS rendered as real glyphs and DOES appear in
+   the extracted text. A parser reads "jane@x.com · 555-0100 · Seattle", not
+   "jane@x.com 555-0100 Seattle". (An earlier version of this comment claimed the
+   opposite; it was wrong.) That is fine -- '·' round-trips through ToUnicode
+   cleanly and every contact parser strips punctuation -- but never use ::before
+   thinking it hides something from a parser. It does not. */
 .contact span + span::before {
   content: "·";
   margin: 0 6pt;

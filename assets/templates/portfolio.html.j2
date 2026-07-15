@@ -1,0 +1,119 @@
+{# portfolio -- a DESIGN SPECIMEN, not an application document.
+
+   For a personal site or folio, where the design IS the work sample and no parser
+   will ever read it. Layout constraints are relaxed here BECAUSE the reader is
+   always human. Honesty and contrast constraints are not relaxed, because those
+   protect the reader, not the parser.
+
+   Renders from the SAME resume.yaml as the Apply track. That is the whole point:
+   fact parity is structural rather than something a human has to diff. If the two
+   documents ever disagree, the source is wrong and both are wrong together.
+
+   Ships a mandatory footer marking it as a specimen, so it can never be mistaken
+   for the document you'd actually submit.
+
+   Do NOT send this to an employer. Use `signature` (or a preset) for that. #}
+{% extends "_base.html.j2" %}
+
+{% block style %}
+:root {
+  --font-body: var(--font-sans);
+  --font-head: var(--font-sans);
+  --spec: {{ config.band | default(accent, true) | default('#12313C', true) }};
+  --page-margin-y: 0.75in;
+  --page-margin-x: 0.85in;
+  --lh-body: 1.5;
+}
+
+/* Display masthead. On the Apply track the name is 23pt because the page has to
+   earn every millimetre; here it can carry the page. */
+.masthead {
+  --bleed: 14pt;
+  background: var(--spec);
+  color: #fff;
+  margin: calc(-1 * (var(--page-margin-y) + var(--bleed)))
+          calc(-1 * (var(--page-margin-x) + var(--bleed))) var(--sp-8);
+  padding: calc(var(--page-margin-y) + var(--bleed) + 14pt)
+           calc(var(--page-margin-x) + var(--bleed)) 34pt;
+}
+.name {
+  font-size: 46pt;
+  font-weight: var(--w-bold);
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+  color: #fff;
+  max-width: 8em;
+}
+.headline {
+  font-size: 13pt;
+  font-weight: var(--w-medium);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1.5pt solid rgba(255,255,255,.28);
+  color: #E4EDF1;              /* measured >=4.5:1 on every shipped band */
+  max-width: 26em;
+}
+.contact { margin-top: var(--sp-4); font-size: var(--fs-meta); color: #E4EDF1; }
+.contact span + span::before { content: "/"; margin: 0 8pt; color: rgba(255,255,255,.45); }
+
+/* Headings as a numbered editorial index.
+   MEASURED: a CSS counter DOES appear in the extracted text ("01 SUMMARY"), because
+   Chrome renders generated content as real glyphs. Harmless here -- this document is
+   never parsed, that is the whole premise of the portfolio track -- but it is why the
+   fact-parity check must compare FACTS (employers, dates, metrics) rather than every
+   numeric token: the folio's stream legitimately contains 01-04 and the Apply track's
+   does not. Do not copy this idiom onto the Apply track. */
+body { counter-reset: sec; }
+h2 {
+  counter-increment: sec;
+  border: none;
+  padding: 0 0 var(--sp-2) 0;
+  font-size: 9pt;
+  letter-spacing: 0.14em;
+  color: var(--spec);
+  border-bottom: 1.5pt solid var(--spec);
+}
+h2::before {
+  content: counter(sec, decimal-leading-zero);
+  margin-right: 9pt;
+  opacity: .45;
+  font-variant-numeric: tabular-nums;
+}
+h2::after { content: none; }
+
+section { margin-top: var(--sp-8); }
+.role { font-size: 13pt; }
+.org, .orgline { color: var(--spec); font-weight: var(--w-medium); }
+.subrow { margin-top: 0; }
+.entry { margin-top: var(--sp-5); }
+.entry-summary { margin-top: var(--sp-2); }
+.line { margin-top: var(--sp-2); }
+.summary .prose { font-size: 13pt; line-height: 1.45; max-width: 30em; color: var(--c-ink); }
+
+/* The one place a real two-column grid is allowed in this repo: no parser will
+   ever read this file, and the Apply track carries the same facts in one column. */
+.skills { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-3) var(--sp-6); }
+.skill-row { display: block; break-inside: avoid; }
+.skill-row dt {
+  font-size: 8.5pt; font-weight: var(--w-bold); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--c-muted); margin-bottom: 2pt;
+}
+.skill-row dd { font-size: 10.5pt; }
+
+li::before { content: "—"; color: var(--spec); opacity: .5; }
+li { padding-left: 15pt; }
+
+.specimen {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-3);
+  border-top: var(--rule-hair) solid var(--c-rule);
+  font-size: 8.5pt;
+  color: var(--c-muted);      /* 7.1:1 -- a disclosure nobody can read is not one */
+  letter-spacing: 0.04em;
+}
+{% endblock %}
+
+{% block footer %}
+{# Mandatory. This document must never be mistaken for the application copy. #}
+<div class="specimen">Design specimen — application copy available on request.</div>
+{% endblock %}

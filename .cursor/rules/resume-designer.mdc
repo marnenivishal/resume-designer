@@ -1,0 +1,20 @@
+---
+description: Building, reviewing, or exporting a resume/CV with this repo
+globs: ["**/*.yaml", "**/*.j2", "scripts/**", "assets/**"]
+alwaysApply: false
+---
+
+Read AGENTS.md before doing anything in this repo. Summary of the parts that are
+easy to get wrong:
+
+- Build with `python scripts/build.py resume.yaml --format pdf,docx,txt --check`.
+  Never hand-write resume HTML — the templates encode measured constraints.
+- ALWAYS run `python scripts/ats_check.py Resume.pdf --data resume.yaml` and report
+  the result. Never claim "ATS-friendly" without it.
+- Single column only. Measured: side-by-side blocks merge into fabricated lines at
+  PDF extraction ("Senior Engineer, Acme  Python, Go"). DOM order does not fix it —
+  PDF has no DOM. Tables are the worst offender, not the safe choice.
+- No skill bars/dots/stars, no contact icons, no photo (US/UK/CA/AU).
+- Never invent employers, titles, dates, degrees, or metrics.
+- Numbers live in assets/tokens.css. Never hard-code them in a template.
+- 107 named looks: `--list-presets`, `--preset <name>`, `scripts/gallery.py`.

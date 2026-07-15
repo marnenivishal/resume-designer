@@ -143,6 +143,68 @@ def load_resume(path: Path) -> dict:
     return data
 
 
+# Type pairings. Static families only -- a variable font makes Chrome emit Type3
+# glyph procedures instead of real embedded text (see references/rendering.md).
+SERIF_STACK = '"Cambria", "Charter", "Bitstream Charter", "Palatino Linotype", Georgia, serif'
+SANS_STACK  = '"Segoe UI", "Helvetica Neue", "Calibri", "Lato", Arial, sans-serif'
+GEO_STACK   = '"Bahnschrift", "DIN Alternate", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
+TYPE_PAIRS = {
+    "sans":      {"body": SANS_STACK,  "head": SANS_STACK},
+    "serif":     {"body": SERIF_STACK, "head": SERIF_STACK},
+    "mixed":     {"body": SERIF_STACK, "head": SANS_STACK},
+    "mixed-alt": {"body": SANS_STACK,  "head": SERIF_STACK},
+    "geometric": {"body": SANS_STACK,  "head": GEO_STACK},
+}
+
+
+def load_presets() -> dict:
+    p = SKILL / "assets" / "presets.yaml"
+    if not p.exists():
+        return {}
+    yaml = _need("yaml", "pyyaml")
+    with open(p, encoding="utf-8") as f:
+        return (yaml.safe_load(f) or {}).get("presets", {}) or {}
+
+
+# A preset defines the LOOK. These are the fields it owns; everything else in the
+# file (max_pages, page size, stage, labels, section_order) is the author's and is
+# never touched by a preset.
+PRESET_LOOK_FIELDS = {"template", "type", "density", "accent", "band",
+                      "heading_style", "rule_color", "name_case"}
+
+
+def apply_preset(data: dict, name: str, explicit: bool = True) -> dict:
+    """Merge a named preset into config.
+
+    Precedence: an EXPLICIT --preset on the command line beats the file, because
+    asking for a look by name and not getting it means the flag is broken. (The
+    first cut used setdefault and every preset silently rendered in the example's
+    own accent -- the flag did nothing.) A preset named inside the file itself
+    (config.preset) is only a default, so hand-set values there still win.
+
+    Either way a preset only ever touches the look fields; page size, max_pages,
+    stage and labels belong to the author.
+    """
+    presets = load_presets()
+    if name not in presets:
+        near = [k for k in presets if k.startswith(name.split("-")[0])][:6]
+        hint = f" Did you mean: {', '.join(near)}?" if near else ""
+        sys.exit(f"error: unknown preset '{name}'. {len(presets)} available; "
+                 f"run --list-presets.{hint}")
+    preset = dict(presets[name])
+    preset.pop("note", None)
+    cfg = data.setdefault("config", {})
+    for k, v in preset.items():
+        if k not in PRESET_LOOK_FIELDS:
+            continue
+        if explicit:
+            cfg[k] = v
+        else:
+            cfg.setdefault(k, v)
+    cfg["_preset"] = name
+    return data
+
+
 def validate(data: dict) -> list[str]:
     """Content lint. Returns human-readable warnings (never fatal)."""
     warn: list[str] = []
@@ -279,6 +341,7 @@ def render_html(data: dict, template: str, overrides: dict | None = None) -> str
         labels=cfg.get("labels", {}) or {},
         page=str(cfg.get("page", "letter")).lower(),
         accent=cfg.get("accent"),
+        type_pair=TYPE_PAIRS.get(str(cfg.get("type", "")).lower()),
         density=cfg.get("density", overrides.get("__density") if overrides else None) or cfg.get("density", "normal"),
         now=datetime.now(),
     )
@@ -517,7 +580,10 @@ def render_docx(data: dict, out: Path) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser(description="Build a resume from YAML.")
-    ap.add_argument("data", help="path to resume.yaml")
+    ap.add_argument("data", nargs="?", help="path to resume.yaml")
+    ap.add_argument("--preset", "-p", default=None,
+                    help="named look, e.g. material-blue. See --list-presets")
+    ap.add_argument("--list-presets", action="store_true", help="list every preset and exit")
     ap.add_argument("--template", "-t", default=None, help="template name (default: config.template or 'modern')")
     ap.add_argument("--format", "-f", default="pdf", help="comma list: pdf,html,docx,txt,all")
     ap.add_argument("--out", "-o", default=None, help="output directory (default: alongside the source)")
@@ -529,10 +595,31 @@ def main() -> int:
     ap.add_argument("--quiet", "-q", action="store_true")
     a = ap.parse_args()
 
+    if a.list_presets:
+        presets = load_presets()
+        fam = None
+        for name, p in presets.items():
+            f = name.split("-")[0]
+            if f != fam:
+                fam = f
+                print()
+            note = (p.get("note") or "").split("(")[0].strip()
+            print(f"  {name:26s} {p.get('template','modern'):10s} {note[:52]}")
+        print(f"\n  {len(presets)} presets. Use: build.py resume.yaml --preset <name>")
+        print(f"  Render them all: python scripts/gallery.py")
+        return 0
+
+    if not a.data:
+        ap.error("the 'data' argument is required (path to resume.yaml)")
+
     src = Path(a.data).resolve()
     if not src.exists():
         sys.exit(f"error: no such file: {src}")
     data = load_resume(src)
+    if a.preset:
+        data = apply_preset(data, a.preset, explicit=True)      # CLI wins
+    elif data.get("config", {}).get("preset"):
+        data = apply_preset(data, data["config"]["preset"], explicit=False)  # file default
     cfg = data.get("config", {})
     template = a.template or cfg.get("template", "modern")
     outdir = Path(a.out).resolve() if a.out else src.parent

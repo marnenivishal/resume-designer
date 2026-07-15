@@ -23,6 +23,40 @@
 :root { --c-accent: {{ accent }}; }
 {% endif %}
 {% block style %}{% endblock %}
+
+{# Config overrides land AFTER the variant's style block so a preset can retune a
+   template without editing it. This is the point of a token system: the axes below
+   compose, which is how ~100 distinct looks exist without ~100 files to maintain.
+   A preset can only touch these axes -- it cannot restructure the document, so it
+   cannot break the parse-safety the structure guarantees. #}
+{% if type_pair %}
+:root {
+  --font-body: {{ type_pair.body }};
+  --font-head: {{ type_pair.head }};
+}
+{% endif %}
+{% if accent %}
+:root { --c-accent: {{ accent }}; }
+{% endif %}
+{% if config.band %}
+:root { --band: {{ config.band }}; }
+{% endif %}
+{% if config.rule_color %}
+:root { --c-rule: {{ config.rule_color }}; }
+{% endif %}
+{% if config.name_case == 'upper' %}
+.name { text-transform: uppercase; letter-spacing: 0.05em; }
+{% endif %}
+{% if config.heading_style == 'plain' %}
+h2 { border-bottom: none; padding-bottom: 0; }
+h2::after { content: none; }
+{% elif config.heading_style == 'bar' %}
+h2 { border-bottom: none; padding-bottom: 0; padding-left: 7pt; border-left: 2.5pt solid var(--c-accent); }
+h2::after { content: none; }
+{% elif config.heading_style == 'thick' %}
+h2 { border-bottom: 1.5pt solid var(--c-accent); }
+h2::after { content: none; }
+{% endif %}
 </style>
 </head>
 <body class="density-{{ density | default('normal') }}">
@@ -193,6 +227,8 @@
 {% endfor %}
 
 {% endblock %}
+
+{% block footer %}{% endblock %}
 
 </body>
 </html>

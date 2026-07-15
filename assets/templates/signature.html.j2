@@ -79,8 +79,10 @@
 }
 
 /* Headings: accent text over a hairline, with a short accent tick at the left.
-   The tick is a ::before pseudo-element -- decoration, never text, so it cannot
-   land in the extracted stream. */
+   The tick uses content:"" -- an empty string, so there is no glyph and nothing to
+   extract. Note the reason: it is safe because it is EMPTY, not because it is a
+   pseudo-element. Generated content with actual text in it DOES land in the
+   extracted stream (measured). */
 h2 {
   color: var(--band);
   border-bottom: var(--rule-hair) solid var(--c-rule);
