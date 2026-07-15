@@ -147,7 +147,7 @@ def load_resume(path: Path) -> dict:
 # glyph procedures instead of real embedded text (see references/rendering.md).
 SERIF_STACK = '"Cambria", "Charter", "Bitstream Charter", "Palatino Linotype", Georgia, serif'
 SANS_STACK  = '"Segoe UI", "Helvetica Neue", "Calibri", "Lato", Arial, sans-serif'
-GEO_STACK   = '"Bahnschrift", "DIN Alternate", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
+GEO_STACK   = '"Century Gothic", "Futura", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
 TYPE_PAIRS = {
     "sans":      {"body": SANS_STACK,  "head": SANS_STACK},
     "serif":     {"body": SERIF_STACK, "head": SERIF_STACK},

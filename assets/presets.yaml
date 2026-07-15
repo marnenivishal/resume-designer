@@ -754,6 +754,8 @@ presets:
     accent: "#16181D"
     band: "#16181D"
     heading_style: bar
-    note: "Colour band with a serif body. Warm authority (ink, 17.8:1 on white)"
+    note: "Colour band with a serif body. Warm authority (ink, 17.8:1 on white)"# accents: 24 | type pairings: 5
+# generated 107 presets
+
 
 # 107 presets across 14 families.

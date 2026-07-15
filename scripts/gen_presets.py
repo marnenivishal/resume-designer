@@ -68,7 +68,7 @@ ACCENTS = {
 # Chrome emit Type3 glyph procedures instead of real embedded text.
 SERIF = '"Cambria", "Charter", "Bitstream Charter", "Palatino Linotype", Georgia, serif'
 SANS  = '"Segoe UI", "Helvetica Neue", "Calibri", "Lato", Arial, sans-serif'
-GEO   = '"Bahnschrift", "DIN Alternate", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
+GEO   = '"Century Gothic", "Futura", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
 
 TYPE = {
     "sans":      {"body": SANS,  "head": SANS},
@@ -129,10 +129,57 @@ FAMILIES = [
 ]
 
 
+def check_no_variable_fonts() -> list[str]:
+    """Refuse to generate if any named font is a variable font, where installed.
+
+    Not hypothetical: the first cut of GEO named "Bahnschrift", which is Microsoft's
+    VARIABLE DIN. Chrome cannot reference a static face for a variation instance, so
+    it emitted /Type3 glyph procedures for every heading across 16 presets -- tripping
+    this project's own ats_check warning. tokens.css says "no VF is named here" and
+    this file quietly broke that.
+
+    A comment asking people to remember is not a control. This is.
+    Fonts that are not installed locally are skipped (nothing to check).
+    """
+    try:
+        from fontTools.ttLib import TTFont
+    except ImportError:
+        return []                      # fontTools optional; skip rather than block
+    import glob, os, re
+    names = set()
+    for stack in (SERIF, SANS, GEO):
+        for fam in re.findall(r'"([^"]+)"', stack):
+            names.add(fam.lower().replace(" ", ""))
+    problems = []
+    for path in glob.glob(os.path.join(os.environ.get("WINDIR", r"C:\Windows"), "Fonts", "*.tt*")):
+        base = os.path.basename(path).lower().replace(" ", "")
+        try:
+            f = TTFont(path, fontNumber=0, lazy=True)
+        except Exception:
+            continue
+        if "fvar" not in f:
+            continue
+        try:
+            fam = str(f["name"].getDebugName(1) or "").lower().replace(" ", "")
+        except Exception:
+            fam = ""
+        for want in names:
+            if want and (want == fam or want == base.rsplit(".", 1)[0]):
+                problems.append(f"{f['name'].getDebugName(1)} (variable) is named in a stack")
+    return problems
+
+
 def main() -> int:
     bad = [(n, h, round(on_white(h), 2)) for n, h in ACCENTS.items() if on_white(h) < 4.5]
     if bad:
         print("FATAL: accents below 4.5:1 on white: " + repr(bad), file=sys.stderr)
+        return 1
+
+    vf = check_no_variable_fonts()
+    if vf:
+        print("FATAL: variable font in a type stack -> Chrome emits Type3 glyph "
+              "procedures instead of real embedded text:\n  " + "\n  ".join(vf),
+              file=sys.stderr)
         return 1
 
     out: list[str] = []
