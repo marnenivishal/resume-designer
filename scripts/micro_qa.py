@@ -117,17 +117,14 @@ PROBE = r"""
   out.stats.runts = runts.length;
   if (runts.length) add('warn', 'runt', `${runts.length} line(s) end with a single-word last line: ${runts.slice(0,2).join(', ')} — reword, don't retrack`);
 
-  // --- empty: a mostly-blank page
-  const h = document.body.scrollHeight;
-  const pages = Math.max(1, Math.ceil(h / PAGE_H));
-  const fillLast = ((h % PAGE_H) || PAGE_H) / PAGE_H;
-  out.stats.bodyHeight = h;
-  out.stats.pages = pages;
-  out.stats.lastPageFill = Math.round(fillLast * 100);
-  if (pages > 1 && fillLast < 0.33)
-    add('warn', 'empty', `last page only ${Math.round(fillLast*100)}% full — cut to fit or add substance`);
-  if (pages === 1 && fillLast < 0.62)
-    add('warn', 'empty', `page only ${Math.round(fillLast*100)}% full — thin content, not a layout fault`);
+  // --- height only. NOT page count.
+  // This used to derive pages and last-page fill from scrollHeight and it was simply
+  // WRONG -- it reported "1 page, 4% fill" for a document Chrome paginates to 2 pages
+  // with both pages 94% full. The DOM does not paginate; Chrome's print layout does,
+  // and it accounts for break-inside/avoid, orphans and widows that the flow view
+  // knows nothing about. references/rendering.md says exactly this and I built the
+  // tool that ignores it. Page metrics now come from the PDF, in Python, below.
+  out.stats.bodyHeight = document.body.scrollHeight;
 
   // --- dates: the right-aligned meta column must share one right edge
   const metas = [...document.querySelectorAll('.row > .meta')];
@@ -224,6 +221,50 @@ def probe(html: Path, chrome: str) -> dict:
                 "stats": {}}
 
 
+def page_metrics(html: Path) -> list[dict]:
+    """Real page metrics, from the sibling PDF. Never from the DOM.
+
+    The DOM does not paginate -- Chrome's print layout does, honouring
+    break-inside/avoid, orphans and widows that the flow view cannot see. Deriving a
+    page count from scrollHeight produced "1 page, 4% full" for a document that is
+    genuinely 2 pages at 94%. If there is no PDF beside the HTML, this reports
+    nothing rather than guessing.
+    """
+    pdf = html.with_suffix(".pdf")
+    if not pdf.exists():
+        return []
+    try:
+        import pdfplumber
+    except ImportError:
+        return []
+    out = []
+    with pdfplumber.open(pdf) as doc:
+        for i, p in enumerate(doc.pages, 1):
+            objs = p.chars + p.rects
+            bottom = max((o["bottom"] for o in objs), default=0)
+            out.append({"page": i, "fill": bottom / p.height if p.height else 0,
+                        "glyphs": len(p.chars)})
+    return out
+
+
+def check_pages(html: Path, rep: list) -> dict:
+    pages = page_metrics(html)
+    if not pages:
+        return {}
+    n = len(pages)
+    last = pages[-1]
+    st = {"pages": n, "lastPageFill": round(last["fill"] * 100)}
+    if n > 1 and last["fill"] < 0.33:
+        rep.append({"level": "warn", "check": "empty",
+                    "msg": f"page {n} is only {round(last['fill']*100)}% full "
+                           f"({last['glyphs']} glyphs) — cut to fit, or add substance"})
+    elif n == 1 and last["fill"] < 0.55:
+        rep.append({"level": "warn", "check": "empty",
+                    "msg": f"page only {round(last['fill']*100)}% full — thin content, "
+                           f"not a layout fault"})
+    return st
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Micro typographic QA on a rendered resume.")
     ap.add_argument("html", nargs="+", help="Resume.html file(s); globs ok")
@@ -245,13 +286,17 @@ def main() -> int:
     allres, worst = {}, 0
     for f in files:
         res = probe(f, chrome)
+        # Page metrics come from the PDF, not the probe. See page_metrics().
+        res["stats"].update(check_pages(f, res["issues"]))
         allres[str(f)] = res
         if a.json:
             continue
         st = res.get("stats", {})
+        pg = (f"{st['pages']}pg, last {st['lastPageFill']}% full"
+              if "pages" in st else "no PDF beside HTML — page metrics skipped")
         print(f"\n  {DIM}micro-qa{RESET}  {f.parent.name}/{f.name}")
         print(f"    {DIM}margins {st.get('leftMargin','?')}/{st.get('rightMargin','?')}px · "
-              f"leading {st.get('leadingRatio','?')} · fill {st.get('lastPageFill','?')}% · "
+              f"leading {st.get('leadingRatio','?')} · {pg} · "
               f"date-edge ±{st.get('dateRightSpread','?')}px · bullets ±{st.get('bulletLeftSpread','?')}px{RESET}")
         if not res["issues"]:
             print(f"    {GRN}PASS{RESET}  nothing to flag")
