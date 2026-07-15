@@ -73,6 +73,15 @@ Full rules in `references/content.md`. The essentials:
 | `compact` | long histories that must fit; dense but still typeset |
 | `academic` | academic CV — publications, grants, teaching; multi-page is correct |
 
+Two look axes exist because a 153-template survey showed the market splits on them
+(`references/pattern-study.md`). Both are parse-verified:
+
+```yaml
+config:
+  date_style: right | inline    # right-aligned dates are A convention, not THE one
+  skills_style: rows  | pills   # pill chips: Novorésumé's house pattern (10 of 12)
+```
+
 ### 5. Build
 
 ```bash
@@ -174,3 +183,4 @@ resume.
 | `references/variants.md` | region or industry is anything but generic US |
 | `references/review.md` | before delivering — the quality bar |
 | `references/rendering.md` | PDF/print/font internals, debugging output |
+| `references/pattern-study.md` | what the market actually ships — 153 templates, counted |

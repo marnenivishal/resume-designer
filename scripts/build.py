@@ -170,7 +170,8 @@ def load_presets() -> dict:
 # file (max_pages, page size, stage, labels, section_order) is the author's and is
 # never touched by a preset.
 PRESET_LOOK_FIELDS = {"template", "type", "density", "accent", "band",
-                      "heading_style", "rule_color", "name_case"}
+                      "heading_style", "rule_color", "name_case",
+                      "date_style", "skills_style"}
 
 
 def apply_preset(data: dict, name: str, explicit: bool = True) -> dict:

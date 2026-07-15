@@ -348,6 +348,20 @@ def matrix() -> list[tuple[str, dict]]:
         experience=[job("Engineer", "Northwind", "2021", "2024", B_ENG[:2])],
         education=[EDU_BS]))
 
+    # --- corpus-driven axes (references/pattern-study.md) --------------------
+    # Both were added because the 153-template survey showed the shipped system
+    # lacked them. Both must survive parse-back like anything else -- a pattern
+    # that is popular is not thereby safe.
+    add("axis-date-inline", R("Maya Ellison", "Senior Backend Engineer",
+        config={"date_style": "inline"}, **base_senior))
+    add("axis-skills-pills", R("Maya Ellison", "Senior Backend Engineer",
+        config={"skills_style": "pills"}, **base_senior))
+    add("axis-both", R("Maya Ellison", "Senior Backend Engineer",
+        config={"date_style": "inline", "skills_style": "pills"}, **base_senior))
+    add("axis-pills-signature", R("Maya Ellison", "Senior Backend Engineer",
+        config={"template": "signature", "skills_style": "pills",
+                "date_style": "inline"}, **base_senior))
+
     # --- presets -------------------------------------------------------------
     # One per family. Rendering is not the bar -- a preset that renders but bleeds
     # is still broken, so every family gets parse-checked like anything else.

@@ -253,3 +253,46 @@ li::before {
 }
 
 .prose { max-width: var(--measure-prose); }
+
+/* --- corpus-driven variants (see references/pattern-study.md) ---------------- */
+
+/* date_style: inline. Right-aligned dates are A convention, not THE convention:
+   surveyed across 153 real templates, Adobe Express used right-aligned in 0 of 16
+   and Canva split between the two. Inline keeps the date in the text flow, which
+   also makes the wrap collision impossible -- nothing is right-aligned to collide
+   with a wrapped employer name. */
+.entry-head { margin-bottom: var(--sp-1); }
+.entry-head .role { font-size: var(--fs-role); font-weight: var(--w-bold); }
+.inline-meta { white-space: nowrap; }
+.inline-meta .dsep { color: var(--c-faint); }
+
+/* skills_style: pills. Novorésumé's house pattern (10 of 12 templates), also on
+   Canva and Resume.io. Safe here in a way a sidebar is not: pills are inline-flowing
+   TEXT, so extraction yields "Languages Go, Python, SQL" -- a real comma run, not a
+   fabricated line. */
+.skills-pills .pill {
+  display: inline-block;
+  padding: 1.5pt 6pt;
+  margin: 0 3pt 3pt 0;
+  border: var(--rule-hair) solid var(--c-rule);
+  border-radius: 8pt;
+  font-size: 9.5pt;
+  line-height: 1.5;
+  break-inside: avoid;
+}
+/* A real comma after each pill so the extracted run reads as a list rather than as
+   run-on words. Absolutely positioned so it costs no layout: the reader sees pills,
+   the parser sees "Go, Python, SQL". Generated content DOES land in the text stream
+   (measured) -- here that is the entire point, not a leak.
+   It must sit TIGHT against the preceding word: a positional gap makes the extractor
+   insert a space and you get "Go , Python". */
+.skills-pills .pill { position: relative; }
+.skills-pills .pill:not(:last-child)::after {
+  content: ",";
+  position: absolute;
+  right: 6pt;              /* == the pill's right padding: sits against the glyph,
+                              not the border, or the extractor inserts a space */
+  color: transparent;
+  pointer-events: none;
+}
+.skills-pills dd { line-height: 1.85; }

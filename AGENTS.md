@@ -66,7 +66,9 @@ describe it as fine.
   the author never wrote (`Senior Engineer, Acme  Python, Go`). Reordering the DOM does
   not help — PDF has no DOM. Tables are the worst offender, not the safe choice.
 - **Do not add skill rating bars, dots, or stars.** Invented precision, invisible to
-  parsers, and they occupy the space evidence should.
+  parsers, and they occupy the space evidence should. (Surveyed: 21+ of 153 commercial
+  templates ship them; Kickresume's `Pipeline` asserts "72% Teamwork" — against what
+  scale? Figma Community has already abandoned them: 0 of 14.)
 - **Do not add icons for contact details or a photo** (US/UK/CA/AU).
 - **Do not hard-code values** that `assets/tokens.css` defines.
 - **Do not repeat the "75% of resumes are auto-rejected by bots" claim.** It traces to
@@ -86,6 +88,7 @@ describe it as fine.
 | `references/variants.md` | region + industry rules (several are legal-adjacent) |
 | `references/review.md` | the quality bar. Run it before delivering. |
 | `references/rendering.md` | PDF/font/Chrome internals when output looks wrong |
+| `references/pattern-study.md` | what 153 surveyed commercial templates actually do, counted |
 | `tests/scenarios.py` | 92 scenarios, each built and parse-verified |
 
 ## Editing this repo

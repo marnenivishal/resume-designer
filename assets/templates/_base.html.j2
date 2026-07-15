@@ -101,12 +101,24 @@ h2::after { content: none; }
        International". The parser then reads the employer as "Northwind Seattle, WA"
        and orphans the rest. So when role+company is too long to sit beside the meta,
        the company drops to its own line, where nothing can collide with it. #}
+    {# date_style: inline puts the date in the text flow after the employer instead of
+       right-aligned. Both are safe -- the merged line stays true either way -- and the
+       153-template survey found right-aligned is NOT dominant (Adobe Express: 0 of 16;
+       Canva splits between the two). See references/pattern-study.md section 3.
+       Inline also sidesteps the wrap collision below entirely, since nothing is
+       right-aligned to collide with. #}
     {% set inline_org = job.company and (job.role ~ ', ' ~ job.company) | length <= 58 %}
+    {% if config.date_style == 'inline' %}
+    <div class="entry-head">
+      <span class="role">{{ job.role }}</span>{% if job.company %}<span class="org-sep">, </span><span class="org">{{ job.company }}</span>{% endif %}<span class="meta inline-meta"><span class="dsep"> · </span>{% if job.location %}{{ job.location }}{% if job.start or job.end %} · {% endif %}{% endif %}{{ job | daterange }}</span>
+    </div>
+    {% else %}
     <div class="row">
       <div class="role">{{ job.role }}{% if inline_org %}<span class="org-sep">, </span><span class="org">{{ job.company }}</span>{% endif %}</div>
       <div class="meta">{% if job.location %}{{ job.location }}{% if job.start or job.end %} · {% endif %}{% endif %}{{ job | daterange }}</div>
     </div>
     {% if job.company and not inline_org %}<div class="org orgline">{{ job.company }}</div>{% endif %}
+    {% endif %}
     {% if job.note %}<div class="meta note">{{ job.note }}</div>{% endif %}
     {% if job.summary %}<p class="entry-summary prose">{{ job.summary }}</p>{% endif %}
     {% if job.bullets %}
@@ -158,14 +170,22 @@ h2::after { content: none; }
 {% if sec == 'skills' and skills %}
 <section>
   <h2>{{ labels.skills | default('Skills') }}</h2>
-  <dl class="skills">
+  {# skills_style: pills is the house pattern at Novorésumé (10 of 12 templates) and
+     recurs on Canva and Resume.io. Unlike a sidebar it is genuinely single-column
+     safe: pills are inline-flowing text, so extraction yields a plain comma run.
+     See references/pattern-study.md section 6. #}
+  <dl class="skills skills-{{ config.skills_style | default('rows', true) }}">
     {% for g in skills %}
       {% if g is mapping %}
       {# Label beside its OWN values -- merges to "Languages Python, Go" which is
          still semantically correct. Never a skills column beside experience. #}
       <div class="skill-row">
         <dt>{{ g.group }}</dt>
-        <dd>{{ g['items'] | join(', ') }}</dd>
+        <dd>
+          {% if config.skills_style == 'pills' %}
+            {% for it in g['items'] %}<span class="pill">{{ it }}</span>{% endfor %}
+          {% else %}{{ g['items'] | join(', ') }}{% endif %}
+        </dd>
       </div>
       {% else %}
       <div class="skill-row"><dd class="wide">{{ g }}</dd></div>
