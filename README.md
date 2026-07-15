@@ -38,10 +38,21 @@ lines, fonts genuinely embedded, contact details findable. Every other tool in t
 space asserts "ATS-friendly!" as a marketing claim. This one shows its work, and
 tells you when it fails.
 
-**It's honest about ATS.** The famous *"75% of resumes are auto-rejected by bots"* is
-unsupported folklore. PDFs are read fine by every mainstream system. There is no
-portable "ATS score", and third-party resume scanners simulate nothing. ATS are
-search tools operated by humans. See [`DESIGN.md § 7`](DESIGN.md).
+**It's honest about ATS — and gets the threat model right.** The famous *"75% of
+resumes are auto-rejected by bots"* traces to Preptel, a vendor that went out of
+business in 2013 without ever publishing a study. No mainstream ATS auto-rejects on
+formatting or fonts; PDFs parse fine everywhere; there is no portable "ATS score".
+
+But the folk model is upside down in a more interesting way. **Total parse failure is
+the *benign* outcome** — Greenhouse documents a fallback where a human types your
+details in. **The real risk is a silent partial mis-parse**: your dates shift, a
+*phantom employment gap* appears in the structured record, and ~48–50% of employers
+automatically screen out gaps over six months (HBS/Accenture *Hidden Workers*, 2021,
+n=8,720). No human, no fallback, no notification.
+
+So the machine that hurts you reads **content, not typography**. That's precisely why
+this tool verifies that your employers, dates and degrees extract *correctly* —
+rather than scoring your keywords. See [`DESIGN.md § 7`](DESIGN.md).
 
 **One source, many outputs.** `resume.yaml` → PDF (send this) · DOCX (when a posting
 demands it) · TXT (paste into web forms) · HTML (preview).
@@ -132,7 +143,7 @@ scripts/build.py      yaml -> pdf/docx/txt/html, content lint, --fit
 scripts/ats_check.py  parse-back verification
 scripts/extract.py    existing resume -> yaml
 references/           content, variants (region/industry), review, rendering
-tests/scenarios.py    75 scenarios, each built and parse-verified
+tests/scenarios.py    79 scenarios, each built and parse-verified
 ```
 
 Every rule in `DESIGN.md` carries an evidence grade: `[MEASURED]` (verified here,

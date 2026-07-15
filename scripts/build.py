@@ -410,13 +410,27 @@ def render_docx(data: dict, out: Path) -> None:
     normal.font.name = cfg.get("docx_font", "Calibri")
     normal.font.size = Pt(10.5)
 
+    # Restyle Word's real heading styles rather than faking headings with bold
+    # Normal text. Semantics are the point: the navigation pane, screen readers, and
+    # some parsers key off the style, not off the boldness. Word's stock headings are
+    # blue Calibri Light, which would fight the design, so they get overridden here.
+    for style_name, size in (("Heading 1", 22), ("Heading 2", 10)):
+        try:
+            st = doc.styles[style_name]
+        except KeyError:
+            continue
+        st.font.name = normal.font.name
+        st.font.size = Pt(size)
+        st.font.bold = True
+        st.font.color.rgb = rgb if style_name == "Heading 2" else RGBColor(0, 0, 0)
+        pf = st.paragraph_format
+        pf.space_before = Pt(10 if style_name == "Heading 2" else 0)
+        pf.space_after = Pt(3 if style_name == "Heading 2" else 2)
+        pf.keep_with_next = True          # a heading must never end a page
+
     b = data["basics"]
-    h = doc.add_paragraph()
-    r = h.add_run(b["name"])
-    r.bold = True
-    r.font.size = Pt(22)
+    h = doc.add_paragraph(b["name"], style="Heading 1")
     h.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    h.paragraph_format.space_after = Pt(2)
 
     if b.get("headline"):
         p = doc.add_paragraph()
@@ -433,14 +447,7 @@ def render_docx(data: dict, out: Path) -> None:
     p.runs[0].font.size = Pt(9.5)
 
     def heading(text: str):
-        p = doc.add_paragraph()
-        p.paragraph_format.space_before = Pt(10)
-        p.paragraph_format.space_after = Pt(3)
-        r = p.add_run(text.upper())
-        r.bold = True
-        r.font.size = Pt(10)
-        r.font.color.rgb = rgb
-        return p
+        return doc.add_paragraph(text.upper(), style="Heading 2")
 
     if data.get("summary"):
         heading("Summary")
