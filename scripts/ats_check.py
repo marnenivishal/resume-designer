@@ -374,9 +374,26 @@ def check_pages(pdf_path: Path, rep: Report, data: dict | None) -> None:
     if want and n > int(want):
         rep.fail("pages", f"{n} pages, but config.max_pages={want}")
     elif n > 2:
-        rep.warn("pages", f"{n} pages — justify anything past 2 outside academia/federal")
+        rep.warn("pages", f"{n} pages — justify anything past 2 outside an academic CV")
     else:
         rep.ok("pages", f"{n} page(s)")
+
+
+def check_size(pdf_path: Path, rep: Report) -> None:
+    """Greenhouse accepts uploads to 100MB but CANNOT PARSE a resume over 2.5MB.
+    The upload succeeds and the parse silently fails -- exactly the quiet failure
+    mode that matters. Text-only resumes are ~50-200KB, so blowing this ceiling
+    means an embedded image, which is its own problem.
+    """
+    mb = pdf_path.stat().st_size / (1024 * 1024)
+    if mb > 2.5:
+        rep.fail("size", f"{mb:.1f} MB — over Greenhouse's 2.5 MB PARSE limit (uploads "
+                         f"accept 100 MB, so this fails silently). Almost certainly an "
+                         f"embedded image.")
+    elif mb > 1.0:
+        rep.warn("size", f"{mb:.1f} MB — large for a text document; check for images")
+    else:
+        rep.ok("size", f"{mb*1024:.0f} KB — well inside every documented parse limit")
 
 
 def main() -> int:
@@ -405,6 +422,7 @@ def main() -> int:
     check_contact(text, rep, data)
     check_headings(text, rep, data)
     check_pages(pdf_path, rep, data)
+    check_size(pdf_path, rep)
     code = rep.render()
 
     if a.show_text:

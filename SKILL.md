@@ -68,6 +68,7 @@ Full rules in `references/content.md`. The essentials:
 | Template | Use for |
 |---|---|
 | `modern` | default — tech, product, marketing, general industry |
+| `signature` | when it must look designed — full-bleed colour masthead, still single-column |
 | `classic` | law, finance, government, medicine, conservative corporates |
 | `compact` | long histories that must fit; dense but still typeset |
 | `academic` | academic CV — publications, grants, teaching; multi-page is correct |
@@ -137,13 +138,23 @@ Enforced by `assets/tokens.css` and measured in `DESIGN.md`:
 
 ## Honesty about ATS
 
-Say what's true. The "75% of resumes are auto-rejected by bots" figure is
-unsupported folklore, and PDFs are read fine by every mainstream system. ATS are
-search tools operated by humans, not autonomous gatekeepers.
+Say what's true, and get the threat model right — the folk version is upside down.
 
-What genuinely matters — and what this skill verifies — is that the text extracts
-cleanly and the human who reads it can find the evidence fast. Do not sell the user
-fear. See `DESIGN.md` § 7.
+- **No mainstream ATS auto-rejects on formatting, fonts, or file type.** No vendor
+  documents such a mechanism. PDFs parse fine everywhere.
+- The **"75% auto-rejected by bots"** figure traces to Preptel, a vendor that went
+  out of business in 2013 without publishing a study. There is no portable "ATS
+  score", and third-party resume scanners simulate nothing.
+- **Total parse failure is the benign case** — Greenhouse documents a manual-entry
+  fallback where a human types the fields in.
+- **The real risk is a silent partial mis-parse**: dates shift or a role drops → a
+  *phantom employment gap* appears in the structured record → and automated screening
+  on **content** is real and documented (~48–50% of employers auto-screen gaps over
+  six months; HBS/Accenture *Hidden Workers*, 2021). No human, no fallback.
+
+So the machine that hurts you reads **content, not typography**. That is exactly why
+`ats_check.py` verifies that employers, dates, and degrees extract *correctly* —
+not why your font is safe. Do not sell the user fear. See `DESIGN.md` § 7.
 
 ## Integrity
 

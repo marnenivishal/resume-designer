@@ -1,0 +1,130 @@
+{# signature -- the premium look, without the parse damage.
+
+   Paid builders signal "expensive" with a dark sidebar, a photo, icons and skill
+   bars. Three of those four are measurably harmful (DESIGN.md sections 2.1, 4) and
+   the fourth is region-dependent. But the *reason* those templates read as premium
+   is not the sidebar. It is: a confident colour field, reversed-out type, real
+   hierarchy, and generous space.
+
+   All of that survives in a single column. This template takes the visual language
+   and leaves the damage:
+
+     full-bleed masthead band   <- the premium signal, full width, nothing beside it
+     reversed-out name          <- confidence
+     accent employer names      <- colour carrying meaning, not decoration
+     ruled section headings     <- structure you can see
+     NO sidebar, NO icons, NO rating bars, NO photo
+
+   The band is full-BLEED: it escapes the @page margin via negative margins so the
+   colour runs to the paper edge. Nothing is ever placed beside it, so the text
+   stream stays a clean single column. #}
+{% extends "_base.html.j2" %}
+
+{% block style %}
+:root {
+  --font-body: var(--font-sans);
+  --font-head: var(--font-sans);
+  --band: {{ config.band | default(accent, true) | default('#12313C', true) }};
+}
+
+/* Full-bleed band. Negative margins pull it out past the page margin box so the
+   colour reaches the paper edge; the padding puts the text back where the margin
+   would have placed it. print-color-adjust (tokens.css) stops Chrome helpfully
+   dropping the background at print time.
+
+   The +--bleed overshoot is deliberate. Pulling by exactly the page margin left a
+   ~4.8pt white sliver at the paper edge (measured off the PDF: band x0=4.8 on a
+   51.84pt margin) -- too small to read as a design choice, and it looks like a
+   printing defect. Chrome clips anything past the paper, so overshooting is free
+   and makes the bleed exact regardless of the renderer's rounding. */
+.masthead {
+  --bleed: 14pt;
+  background: var(--band);
+  margin: calc(-1 * (var(--page-margin-y) + var(--bleed)))
+          calc(-1 * (var(--page-margin-x) + var(--bleed)))
+          var(--gap-section);
+  padding: calc(var(--page-margin-y) + var(--bleed))
+           calc(var(--page-margin-x) + var(--bleed))
+           var(--sp-5);
+  color: #FFFFFF;
+}
+
+.name {
+  font-size: 26pt;
+  font-weight: var(--w-bold);
+  letter-spacing: -0.015em;
+  line-height: var(--lh-name);
+  color: #FFFFFF;
+}
+
+.headline {
+  font-size: var(--fs-title);
+  font-weight: var(--w-medium);
+  margin-top: var(--sp-1);
+  /* Not pure white: a step down in contrast is what makes the name read as the
+     primary element. Measured 6.2:1 against the default band -- comfortably past
+     AA, and the drop is what creates the hierarchy. */
+  color: #C6D8DF;
+}
+
+.contact {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-meta);
+  color: #DCE8EC;
+}
+.contact span + span::before {
+  content: "·";
+  margin: 0 6pt;
+  color: #7EA3B0;
+}
+
+/* Headings: accent text over a hairline, with a short accent tick at the left.
+   The tick is a ::before pseudo-element -- decoration, never text, so it cannot
+   land in the extracted stream. */
+h2 {
+  color: var(--band);
+  border-bottom: var(--rule-hair) solid var(--c-rule);
+  position: relative;
+  padding-bottom: var(--sp-1);
+}
+h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 34pt;
+  height: 1.5pt;
+  background: var(--band);
+}
+
+/* Colour carrying meaning: the employer is the second thing a reader looks for
+   after the title, so it gets the accent. That is the whole job of the accent. */
+.org { color: var(--band); font-weight: var(--w-medium); }
+.orgline { color: var(--band); font-weight: var(--w-medium); }
+
+.subrow { margin-top: 0; }
+.entry-summary { margin-top: var(--sp-1); }
+.line { margin-top: var(--sp-1); }
+
+.summary .prose { font-size: 10.5pt; }
+
+.skills { font-size: var(--fs-body); }
+.skill-row {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-1);
+  break-inside: avoid;
+}
+.skill-row dt {
+  font-weight: var(--w-bold);
+  color: var(--c-strong);
+  flex: 0 0 78pt;
+}
+.skill-row dd { flex: 1; }
+
+li::before { color: var(--band); }
+
+.pubs { padding-left: 14pt; }
+.pubs li { padding-left: 2pt; }
+.pubs li::before { content: none; }
+{% endblock %}

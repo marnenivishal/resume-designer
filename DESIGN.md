@@ -295,20 +295,76 @@ Refuse these, and say why:
 
 ---
 
-## 7. Myths not encoded `[MYTH]`
+## 7. ATS: the correct threat model
 
-- **"75% of resumes are rejected by ATS before a human sees them."** Endlessly
-  repeated, traceable to no rigorous source, and inconsistent with how these systems
-  actually work. ATS are search-and-filter tools operated by humans; they do not
-  autonomously bin résumés on a hidden score.
-- **"PDFs can't be read by ATS."** False for every mainstream system. Use PDF
-  unless the posting explicitly asks for DOCX.
-- **"You need a keyword-match score above N."** No such universal gate exists.
-  Mirroring the posting's actual vocabulary is still worth doing — because a
-  *recruiter* searches those terms.
+The folk model is upside down, and getting it right changes what the design optimises
+for.
 
-The skill mirrors job-posting language because it helps a human searcher, **not**
-because a robot is scoring you. Same action, honest reason.
+### 7.1 Parse failure is the *benign* outcome `[ESTABLISHED]`
+
+Greenhouse documents the fallback verbatim: *"If a resume fails to parse, you'll need
+to manually input the candidate's details into the fields."* The document stays
+attached and visible. **A total parse failure is loud and self-correcting — a human
+types your details in.**
+
+### 7.2 Silent partial mis-parse is the actual risk `[ESTABLISHED]`
+
+> Dates shift, a role drops, a degree is missed → a **phantom employment gap** now
+> exists in the structured record → and automated screening on *content* is real,
+> documented, and common: **~48–50% of employers automatically screen out resumes
+> showing an employment gap over six months**, and degree filters behave the same way.
+> No human, no fallback, no notification.
+>
+> Source: Harvard Business School / Accenture, *Hidden Workers: Untapped Talent*
+> (2021) — n=8,720 workers, 2,275 executives, US/UK/DE. Over 90% of employers use
+> their system to filter or rank; candidates *"fall out of the candidate pool, having
+> never been assessed by a human being."* Corroborated causally by Kroft, Lange &
+> Notowidigdo, *QJE* 128(3) 2013 (~12,000 resumes): gaps reduce callbacks, with most
+> of the decline inside the first 8 months.
+
+So the machine that hurts you **reads content, not typography**. It doesn't reject
+your font. It rejects the gap your mis-parsed dates invented.
+
+This is why `ats_check.py` verifies *field-level fidelity* — that your employers,
+dates, and degree extract correctly and in order — rather than scoring keywords.
+**That check is the whole point.** It is not a nicety.
+
+### 7.3 The upside is avoiding the zero, not scoring points `[ESTABLISHED]`
+
+Well-formed input already parses at **>95% accuracy, ~0.5s median** (Textkernel
+specs). The distribution is **bimodal**: you are either fine or you are in the zero
+bucket (`ovIsImage`, `ovNoText`, `ovIsEncrypted`, `ovCorrupt`). And per Textkernel:
+*"The vast majority of problems in parsing are not from processing the plain text,
+but from conversion to plain text."*
+
+Which is exactly the step this skill measures.
+
+### 7.4 Myths — never encode, correct on contact `[MYTH]`
+
+- **"75% of resumes are auto-rejected by ATS before a human sees them."** The origin
+  is now traceable: **Preptel**, a resume-optimisation vendor that **went out of
+  business in August 2013** without ever publishing a study, dataset, or method. The
+  number drifts across retellings — 70%, 75%, 88% — which is diagnostic of folklore.
+  A real statistic has one value and one method.
+- **"PDFs can't be read by ATS."** False for every mainstream system. Greenhouse
+  accepts `.doc/.docx/.pdf/.rtf/.txt` and states **no preference**.
+- **"You need a keyword-match score above N."** No such universal gate exists, and
+  third-party "ATS scanners" simulate no real ATS — there is no portable ATS score.
+- **"No mainstream ATS auto-rejects on formatting, fonts, or file type"**, and no
+  vendor documents such a mechanism.
+
+The skill mirrors job-posting vocabulary because **a human recruiter searches those
+words** — not because a robot is scoring you. Same action, honest reason.
+
+### 7.5 Named parse-breakers, from the vendor `[ESTABLISHED]`
+
+Greenhouse names these explicitly, which independently corroborates §2.1:
+
+contact info **in a header, footer, or text box** · **columned layouts** · complex
+tables · graphics/photos/word art · spaces between letters · resumes **over 2.5 MB**
+(uploads accept 100 MB — the *parse* fails, silently) · abbreviated job titles
+(`Sr. Account Exec` rather than `Senior Account Executive`) · company names missing
+`Inc./Co./Ltd/LLC`.
 
 ---
 

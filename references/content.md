@@ -151,7 +151,7 @@ worse than the fact.
 
 | Situation | Approach |
 |---|---|
-| **Employment gap** | Use years (`2019 – 2021`) not months if it closes a short gap honestly. For a long gap, name it in one neutral line: `Career break — caregiving, 2020–2022`. Recruiters see thousands; the evasion is what reads badly, not the gap. |
+| **Employment gap** | See the note below — this one has real evidence behind it. Use years (`2019 – 2021`) not months where that is honestly accurate. For a long gap, name it in one neutral line: `Career break — caregiving, 2020–2022`. Recruiters see thousands; the evasion reads worse than the gap. |
 | **Career change** | Lead with a summary (this is what it's *for*). Reframe past work in the target's vocabulary — real transferable outcomes, not invented ones. Consider putting a relevant project *above* unrelated experience. |
 | **Short tenures** | Don't hide them. Group contract work under one heading: `Independent Consultant, 2019–2022` with clients as bullets. That's accurate and reads as intent, not churn. |
 | **Promotions at one company** | One company block, roles nested beneath. Shows growth and saves space. Two separate blocks reads as two jobs. |
@@ -160,6 +160,31 @@ worse than the fact.
 | **No experience (student)** | Projects and coursework ARE evidence. A real project with a real outcome beats an empty `Experience` heading. Order: education → projects → any work at all. |
 | **Contract/freelance** | Group under one banner with a date range; list notable clients/outcomes as bullets. |
 | **Returning after a break** | Lead with a summary framing the return. List the break neutrally. Any recent upskilling goes near the top. |
+
+### The gap rule is the one with real evidence behind it `[ESTABLISHED]`
+
+Most advice in this table is convention. This one isn't, and it's worth knowing why
+the date format matters more than it looks:
+
+- **~48–50% of employers automatically screen out resumes showing an employment gap
+  over six months** — over 90% use their system to filter or rank at all. Candidates
+  *"fall out of the candidate pool, having never been assessed by a human being."*
+  (Harvard Business School / Accenture, *Hidden Workers: Untapped Talent*, 2021 —
+  n=8,720 workers, 2,275 executives, US/UK/DE.)
+- Gaps **causally** reduce callbacks, and **most of the decline happens within the
+  first 8 months**. (Kroft, Lange & Notowidigdo, *QJE* 128(3) 2013 — ~12,000 resumes
+  sent to ~3,000 postings. Scope: mid/low-skill US roles, pre-2013.)
+
+Two things follow, and the second is the important one:
+
+1. **Year-only dates are legitimate** when accurate. `2019 – 2021` is not a lie
+   because you left in March and started in November; it is a coarser truth. Do not
+   use it to conceal a two-year gap — that fails at the interview.
+2. **This is why parse fidelity matters.** A mis-parsed date creates a *phantom* gap
+   in the structured record, and a real, documented filter fires on it — with no
+   human and no fallback. That is the actual mechanism behind "the ATS rejected me",
+   and it has nothing to do with your font. Run `ats_check.py` and confirm the dates
+   extract correctly. (`../DESIGN.md` § 7.)
 
 ---
 

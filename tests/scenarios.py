@@ -219,9 +219,19 @@ def matrix() -> list[tuple[str, dict]]:
         experience=[job("Senior Engineer", "Northwind", "2021-03", "present", B_ENG),
                     job("Engineer", "Globex", "2018-06", "2021-03", B_ENG[:2], "Portland, OR")],
         education=[EDU_BS], skills=SK_ENG)
-    for t in ("modern", "classic", "compact"):
+    for t in ("modern", "classic", "compact", "signature"):
         add(f"template-{t}", R("Maya Ellison", "Senior Backend Engineer",
                                config={"template": t}, **base_senior))
+    # signature's full-bleed band must survive a custom band colour and A4 geometry
+    add("signature-custom-band", R("Maya Ellison", "Senior Backend Engineer",
+        config={"template": "signature", "band": "#3B2E4A", "accent": "#3B2E4A"}, **base_senior))
+    add("signature-a4", R("Maya Ellison", "Senior Backend Engineer",
+        config={"template": "signature", "page": "a4"}, **base_senior))
+    add("signature-two-page", R("Pat Delgado", "Principal Engineer",
+        config={"template": "signature", "max_pages": 2},
+        experience=[job(f"Engineer {i}", f"Company {i}", f"{2008+i*2}-01", f"{2010+i*2}-01",
+                        B_ENG[:2]) for i in range(7)],
+        education=[EDU_BS], skills=SK_ENG))
     add("template-academic", R("Dr. Lin Chen", "Postdoctoral Researcher",
         config={"template": "academic", "max_pages": 4, "stage": "academic"},
         education=[EDU_PHD],

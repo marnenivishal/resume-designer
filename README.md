@@ -116,6 +116,7 @@ python scripts/extract.py old_resume.pdf -o resume.yaml  # import an existing on
 | Template | For |
 |---|---|
 | `modern` | default — tech, product, marketing, general industry |
+| `signature` | the premium look — full-bleed colour masthead, reversed-out name, no sidebar |
 | `classic` | law, finance, government, medicine — ink only, no colour |
 | `compact` | long histories that must fit |
 | `academic` | academic CV — publications, grants; multi-page is *correct* here |

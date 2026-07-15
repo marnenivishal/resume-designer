@@ -108,12 +108,12 @@
      Near-black, not #000: pure black on white is harsh in print and slightly
      halates. #16181D keeps density without the glare.
      Every value below passes WCAG AA (>=4.5:1) on white. */
-  --c-ink:     #16181D;  /* 15.9:1 - body */
+  --c-ink:     #16181D;  /* 17.8:1 - body */
   --c-strong:  #000000;  /* names/roles where max weight is wanted */
-  --c-muted:   #55595F;  /* 7.2:1  - dates, locations */
-  --c-faint:   #8A8F96;  /*  3.2:1 - NON-TEXT ONLY (rules). Never for text. */
+  --c-muted:   #55595F;  /* 7.1:1  - dates, locations */
+  --c-faint:   #8A8F96;  /*  3.3:1 - NON-TEXT ONLY (rules). Never for text. */
   --c-rule:    #D8DCE0;
-  --c-accent:  #1F4E5F;  /* 8.6:1  - deep teal; one accent, used sparingly */
+  --c-accent:  #1F4E5F;  /* 9.1:1  - deep teal; one accent, used sparingly */
   --c-paper:   #FFFFFF;
 
   /* --- rules --------------------------------------------------------------- */
