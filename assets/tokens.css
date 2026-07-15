@@ -142,6 +142,18 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Page geometry
+
+   @page side margins are 0 (see _base.html.j2) so a full-bleed masthead is
+   possible at all -- Chrome clips paint to the page margin box, so a nonzero side
+   margin makes a bleed impossible, not merely awkward. The horizontal inset that
+   the margin used to provide now lives here.
+   --------------------------------------------------------------------------- */
+
+.sheet    { padding: 0 var(--page-margin-x); }
+.masthead { padding: 0 var(--page-margin-x); }   /* default: inset like the content */
+
+/* ---------------------------------------------------------------------------
    Base document
    --------------------------------------------------------------------------- */
 
@@ -226,29 +238,61 @@ h2, .h2 {
 section { margin-top: var(--gap-section); }
 section:first-of-type { margin-top: 0; }
 
+/* Page breaking inside an entry.
+
+   This used to be `break-inside: avoid-page` on .entry, with a comment claiming it
+   "keeps a job's title with its first bullets". It does not -- it forbids ANY split,
+   so a nine-bullet job cannot break and jumps to the next page WHOLESALE, stranding
+   a third of the previous page. Measured on a real 10-year resume: page 1 stopped at
+   67%, ended on an orphaned bullet glyph, and the document ran to 3 pages, not 2.
+
+   The intent was right; the property was wrong. What actually expresses it:
+     - the heading row must not end a page   -> break-after: avoid
+     - a bullet must not split across pages  -> break-inside: avoid (on li, below)
+     - never one lonely bullet either side   -> orphans / widows
+   The entry itself is then free to split, which is correct: a long job SHOULD be
+   allowed to continue overleaf. */
 .entry {
   margin-top: var(--gap-entry);
-  /* Keep a job's title with at least its first bullets. */
-  break-inside: avoid-page;
+  break-inside: auto;
 }
 .entry:first-of-type { margin-top: 0; }
+
+/* The title/date row sticks to whatever follows it. */
+.entry .row,
+.entry .entry-head,
+.entry .orgline { break-after: avoid; page-break-after: avoid; }
+
+/* At least two bullets together either side of a break. */
+.entry ul { orphans: 2; widows: 2; }
 
 .role { font-size: var(--fs-role); font-weight: var(--w-bold); color: var(--c-strong); }
 .org  { font-weight: var(--w-medium); }
 
 ul { list-style: none; margin-top: var(--sp-1); }
+
+/* Hanging indent via text-indent, NOT absolute positioning.
+
+   The bullet used to be an absolutely-positioned ::before. Being out of flow it is
+   not bound by the li's break-inside:avoid -- so at a page break the marker painted
+   on page 1 while its text moved to page 2, stranding a lone "•" as the last thing
+   on the page. Measured on a real resume; found by rasterising, not by reading
+   coordinates.
+
+   Negative text-indent + matching padding keeps the marker IN FLOW: it belongs to
+   the first line box, breaks with its own text, and still extracts as plain
+   punctuation ("• Cut p99 latency..."). */
 li {
-  position: relative;
   padding-left: 11pt;
+  text-indent: -11pt;
   margin-top: var(--gap-bullet);
   break-inside: avoid;
 }
-/* Typographic bullet, optically sized and aligned. A real character (not a
-   pseudo-graphic) so it survives text extraction as plain punctuation. */
 li::before {
   content: "\2022";
-  position: absolute;
-  left: 1pt;
+  display: inline-block;
+  width: 11pt;
+  text-indent: 0;
   color: var(--c-faint);
 }
 

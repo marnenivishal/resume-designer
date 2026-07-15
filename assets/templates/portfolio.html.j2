@@ -15,6 +15,10 @@
    Do NOT send this to an employer. Use `signature` (or a preset) for that. #}
 {% extends "_base.html.j2" %}
 
+{% block page_extra %}
+@page :first { margin-top: 0; }
+{% endblock %}
+
 {% block style %}
 :root {
   --font-body: var(--font-sans);
@@ -25,16 +29,13 @@
   --lh-body: 1.5;
 }
 
-/* Display masthead. On the Apply track the name is 23pt because the page has to
-   earn every millimetre; here it can carry the page. */
+/* Display masthead, full-bleed. Same correction as signature: no negative margins,
+   @page side margins are 0, @page :first drops the top margin. */
 .masthead {
-  --bleed: 14pt;
   background: var(--spec);
   color: #fff;
-  margin: calc(-1 * (var(--page-margin-y) + var(--bleed)))
-          calc(-1 * (var(--page-margin-x) + var(--bleed))) var(--sp-8);
-  padding: calc(var(--page-margin-y) + var(--bleed) + 14pt)
-           calc(var(--page-margin-x) + var(--bleed)) 34pt;
+  padding: calc(var(--page-margin-y) + 14pt) var(--page-margin-x) 34pt;
+  margin: 0 0 var(--sp-8);
 }
 .name {
   font-size: 46pt;

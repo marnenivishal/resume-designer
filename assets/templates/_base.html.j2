@@ -15,10 +15,21 @@
 <style>
 {{ tokens_css }}
 
+{# MEASURED: Chrome CLIPS painted content to the @page margin box. A background
+   pulled outside it with negative margins is not bled -- it is cut off, and the
+   padding meant to compensate then shoves the text flush against the cut edge.
+   (That shipped. It was visible. Coordinates in the PDF said -6.7pt; the RASTER
+   said otherwise. Verify painted pixels, not rect geometry.)
+
+   So: side margins are ZERO at the page level and the horizontal inset lives on
+   .sheet / .masthead instead. Vertical margins stay at page level so EVERY page
+   keeps its top and bottom margin. A template with a full-bleed masthead drops
+   only page 1's top margin, via the page_extra block. #}
 @page {
   size: {{ 'A4' if page == 'a4' else 'Letter' }};
-  margin: var(--page-margin-y) var(--page-margin-x);
+  margin: var(--page-margin-y) 0;
 }
+{% block page_extra %}{% endblock %}
 {% if accent %}
 :root { --c-accent: {{ accent }}; }
 {% endif %}
@@ -81,6 +92,7 @@ h2::after { content: none; }
 </header>
 {% endblock %}
 
+<div class="sheet">
 {% block body %}
 {#- The org-drop threshold is a DOCUMENT decision, not a per-record one.
 
@@ -275,6 +287,7 @@ h2::after { content: none; }
 {% endfor %}
 
 {% endblock %}
+</div>
 
 {% block footer %}{% endblock %}
 

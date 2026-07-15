@@ -20,6 +20,12 @@
    stream stays a clean single column. #}
 {% extends "_base.html.j2" %}
 
+{% block page_extra %}
+/* Page 1 only: no top margin, so the masthead band reaches the paper edge.
+   Pages 2+ keep var(--page-margin-y) from the base @page rule. */
+@page :first { margin-top: 0; }
+{% endblock %}
+
 {% block style %}
 :root {
   --font-body: var(--font-sans);
@@ -27,25 +33,20 @@
   --band: {{ config.band | default(accent, true) | default('#12313C', true) }};
 }
 
-/* Full-bleed band. Negative margins pull it out past the page margin box so the
-   colour reaches the paper edge; the padding puts the text back where the margin
-   would have placed it. print-color-adjust (tokens.css) stops Chrome helpfully
-   dropping the background at print time.
+/* Full-bleed band -- for real this time.
 
-   The +--bleed overshoot is deliberate. Pulling by exactly the page margin left a
-   ~4.8pt white sliver at the paper edge (measured off the PDF: band x0=4.8 on a
-   51.84pt margin) -- too small to read as a design choice, and it looks like a
-   printing defect. Chrome clips anything past the paper, so overshooting is free
-   and makes the bleed exact regardless of the renderer's rounding. */
+   The previous version pulled the band outside the @page margin box with negative
+   margins and "compensated" with padding. Chrome CLIPS to that box, so the bleed
+   never happened and the padding pushed the name flush against the clipped edge.
+   Rasterising the PDF showed it immediately; reading the rect coordinates did not.
+
+   Now: @page side margins are 0 (_base) so the band is full-width by default, and
+   @page :first drops page 1's top margin so it reaches the top edge. The band
+   supplies the text inset itself. No negative margins anywhere. */
 .masthead {
-  --bleed: 14pt;
   background: var(--band);
-  margin: calc(-1 * (var(--page-margin-y) + var(--bleed)))
-          calc(-1 * (var(--page-margin-x) + var(--bleed)))
-          var(--gap-section);
-  padding: calc(var(--page-margin-y) + var(--bleed))
-           calc(var(--page-margin-x) + var(--bleed))
-           var(--sp-5);
+  padding: var(--page-margin-y) var(--page-margin-x) var(--sp-5);
+  margin: 0 0 var(--gap-section);
   color: #FFFFFF;
 }
 

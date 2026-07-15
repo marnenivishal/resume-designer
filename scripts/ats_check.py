@@ -379,6 +379,92 @@ def check_pages(pdf_path: Path, rep: Report, data: dict | None) -> None:
         rep.ok("pages", f"{n} page(s)")
 
 
+def check_paint(pdf_path: Path, rep: Report) -> None:
+    """Verify the PAINTED page, not the declared geometry.
+
+    This exists because of a real, shipped, visible bug. The signature masthead bled a
+    colour band past the @page margin box with negative margins. The rect coordinates
+    in the PDF said x0=-6.7pt -- past the paper edge -- so it "verified". But Chrome
+    CLIPS paint to the page margin box: the band stopped at the margin, and the
+    compensating padding then shoved the name flush against the cut edge. Every
+    coordinate check passed. A human saw it instantly.
+
+    Coordinates are a claim; pixels are the evidence. So this rasterises.
+
+    HONEST SCOPE -- read before trusting it. This reliably reports:
+      * whether the masthead text sits on a colour field, and its padding inside it
+      * whether the band reaches the paper edge (measured, not declared)
+      * whether any text is jammed against the paper edge
+    It does NOT catch every clipped-bleed geometry. If the text lands exactly at the
+    field's top-left corner, both probes fall outside the field and it reads as "no
+    band" -- a false PASS. The real protection against that bug is that the technique
+    is fixed (see DESIGN.md: @page side margins are 0, no negative-margin bleeds) and
+    the scenario suite covers every template. This check is defence in depth, not the
+    wall. It is documented that way so nobody mistakes a PASS here for proof.
+    """
+    try:
+        import fitz  # PyMuPDF
+    except ImportError:
+        rep.warn("paint", "PyMuPDF not installed — cannot verify painted output "
+                          "(pip install pymupdf). Geometry checks alone already "
+                          "missed a visible bug once.")
+        return
+    doc = fitz.open(str(pdf_path))
+    try:
+        page = doc[0]
+        pix = page.get_pixmap(dpi=72)
+        w, h = pix.width, pix.height
+        white = lambda c: c[0] > 244 and c[1] > 244 and c[2] > 244
+
+        # Does the masthead text sit on a colour field, and does it have padding?
+        #
+        # Two probes around the largest glyph run near the top:
+        #   ABOVE it -> is there a colour field at all?
+        #   LEFT  of it -> is the field still there beside the text, or does the text
+        #                  start exactly at the field's edge?
+        # A clipped bleed reads as: field ABOVE (the band's top padding survived) but
+        # WHITE immediately to the LEFT (the band was cut at the margin and the text
+        # begins on the cut). That is precisely the defect, and it is unambiguous:
+        #   band + padding  -> above coloured, left coloured
+        #   band + flush    -> above coloured, left WHITE      <- FAIL
+        #   no band         -> above white
+        spans = [sp for b in page.get_text("dict")["blocks"] if b.get("type") == 0
+                 for l in b["lines"] for sp in l["spans"]]
+        top_spans = [sp for sp in spans if sp["bbox"][1] < h * 0.25]
+        if top_spans:
+            big = max(top_spans, key=lambda sp: sp["size"])
+            nx, ny0, ny1 = int(big["bbox"][0]), int(big["bbox"][1]), int(big["bbox"][3])
+            mid = min(max((ny0 + ny1) // 2, 0), h - 1)
+            above = pix.pixel(min(nx + 4, w - 1), max(ny0 - 6, 0))
+            left = pix.pixel(max(nx - 3, 0), mid)
+            if white(above):
+                rep.ok("paint", "masthead text sits on white — no colour field to clip")
+            elif white(left):
+                rep.fail("paint", "the name sits flush against the edge of its colour field — "
+                                  "no padding. This is a bleed that Chrome CLIPPED to the "
+                                  "@page margin box while the padding compensated for a bleed "
+                                  "that never happened. See DESIGN.md > full-bleed.")
+            else:
+                pad = 0
+                while nx - pad > 0 and not white(pix.pixel(nx - pad, mid)):
+                    pad += 1
+                bled = (nx - pad) <= 1
+                rep.ok("paint", f"masthead band {'bleeds to the paper edge' if bled else 'is inset'}"
+                                f"; name inset {pad}pt inside it (verified in pixels)")
+
+        # Text must never touch the paper edge.
+        spans = [s for b in page.get_text("dict")["blocks"] if b.get("type") == 0
+                 for l in b["lines"] for s in l["spans"]]
+        if spans:
+            left = min(s["bbox"][0] for s in spans)
+            if left < 18:
+                rep.fail("paint", f"text starts {left:.0f}pt from the paper edge — no margin")
+            else:
+                rep.ok("paint", f"text inset {left:.0f}pt from the paper edge")
+    finally:
+        doc.close()
+
+
 def check_size(pdf_path: Path, rep: Report) -> None:
     """Greenhouse accepts uploads to 100MB but CANNOT PARSE a resume over 2.5MB.
     The upload succeeds and the parse silently fails -- exactly the quiet failure
@@ -423,6 +509,7 @@ def main() -> int:
     check_headings(text, rep, data)
     check_pages(pdf_path, rep, data)
     check_size(pdf_path, rep)
+    check_paint(pdf_path, rep)
     code = rep.render()
 
     if a.show_text:

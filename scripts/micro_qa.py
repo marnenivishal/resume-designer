@@ -177,11 +177,14 @@ def probe(html: Path, chrome: str) -> dict:
     # measuring that reports "content starts 0px from the paper edge" for a document
     # whose printed margins are perfect. Reconstruct the page box from the same
     # tokens @page uses, so screen geometry == paper geometry.
+    # Only the VERTICAL page margin here: the horizontal inset lives on .sheet in
+    # the document itself (@page side margins are 0 so a masthead can bleed). Adding
+    # it here too double-padded and reported 115px margins on a 58px document.
     emulate = """<style id="__qa_page">
       html { background: #fff; }
       body {
         width: 8.5in;
-        padding: var(--page-margin-y) var(--page-margin-x);
+        padding: var(--page-margin-y) 0;
         margin: 0;
         box-sizing: border-box;
       }

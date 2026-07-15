@@ -64,16 +64,22 @@ h2 {
   list-style: none;
   counter-reset: pub;
 }
+/* Hanging indent in flow, matching tokens.css. The marker used to be absolutely
+   positioned against li{position:relative} -- when that was removed (it stranded
+   bullets at page breaks), these [1] markers detached and extraction saw
+   "[1]  <63pt gap>  Rivera A., ..." as a merged line. In flow, they cannot. */
 .pubs li {
   counter-increment: pub;
   padding-left: 22pt;
+  text-indent: -22pt;
   margin-top: var(--sp-2);
   break-inside: avoid;
 }
 .pubs li::before {
-  content: "[" counter(pub) "]";
-  position: absolute;
-  left: 0;
+  content: "[" counter(pub) "] ";
+  display: inline-block;
+  width: 22pt;
+  text-indent: 0;
   color: var(--c-ink);
   font-variant-numeric: tabular-nums;
 }
