@@ -267,7 +267,17 @@ section:first-of-type { margin-top: 0; }
 .entry .entry-head,
 .entry .orgline { break-after: avoid; page-break-after: avoid; }
 
-/* At least two bullets together either side of a break. */
+/* ...but "sticks to the NEXT thing" is not enough. Measured on a real 2-page resume:
+   a job header plus exactly ONE bullet sat at the foot of page 1 while FOUR bullets
+   belonging to it opened page 2 with no employer above them. Three independent
+   reviewers flagged the same page as having orphan bullets with no attribution.
+
+   `orphans`/`widows` do not help here: they govern LINE boxes inside a block, not
+   sibling list items. Gluing the first two bullets to the header is what actually
+   expresses "a job arrives with enough of itself to be legible": if the header and
+   two bullets do not fit, the whole group moves to the next page -- which is right.
+   The rest of the list may still flow over, which is also right. */
+.entry ul > li:nth-child(-n+2) { break-before: avoid; page-break-before: avoid; }
 .entry ul { orphans: 2; widows: 2; }
 
 .role { font-size: var(--fs-role); font-weight: var(--w-bold); color: var(--c-strong); }
