@@ -1,0 +1,39 @@
+# Build output
+*.pdf
+*.docx
+*.html
+!assets/templates/*.html.j2
+build/
+out/
+dist/
+
+# Real resumes. This one matters: a resume is PII -- name, phone, address,
+# employment history. Nobody should accidentally commit theirs to a public repo.
+# examples/*.yaml is the exception: those are fictional.
+resume.yaml
+*_resume.yaml
+*-resume.yaml
+my*.yaml
+!examples/*.yaml
+
+# Test artifacts
+tests/out/
+.pytest_cache/
+results.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Playwright / scratch
+.playwright-mcp/

@@ -1,0 +1,85 @@
+{# academic -- a CV, not a resume. Different document, different rules.
+
+   In US academia "CV" means the long-form record: exhaustive, not selective. The
+   one-page rule does NOT apply and applying it signals you don't know the genre.
+   Publications are the substance and lead the document; page numbers matter
+   because the thing is long enough to lose your place in.
+
+   Set config.max_pages high (or omit) and do NOT use --fit here. #}
+{% extends "_base.html.j2" %}
+
+{% block style %}
+:root {
+  --font-body: var(--font-serif);
+  --font-head: var(--font-serif);
+  /* Boolean-mode default: build.py passes None when accent is unset, and plain
+     default() would emit invalid CSS ("None") and silently fall back to teal. */
+  --c-accent: {{ accent | default('#16181D', true) }};
+  --page-margin-y: 0.8in;
+  --page-margin-x: 0.9in;
+  --lh-body: 1.4;
+}
+
+/* Running page numbers: a 9-page CV without them is hostile to the reader. */
+@page {
+  @bottom-center {
+    content: counter(page);
+    font-family: var(--font-serif);
+    font-size: var(--fs-micro);
+    color: var(--c-muted);
+  }
+}
+
+.masthead {
+  text-align: center;
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-5);
+  border-bottom: var(--rule-hair) solid var(--c-ink);
+}
+.name {
+  font-size: 20pt;
+  font-weight: var(--w-bold);
+  letter-spacing: 0.04em;
+  line-height: var(--lh-name);
+}
+.headline { font-size: var(--fs-title); font-style: italic; color: var(--c-muted); margin-top: var(--sp-1); }
+.contact { margin-top: var(--sp-2); font-size: var(--fs-meta); }
+.contact span + span::before { content: "·"; margin: 0 6pt; color: var(--c-faint); }
+
+h2 {
+  letter-spacing: 0.12em;
+  border-bottom: var(--rule-hair) solid var(--c-ink);
+  padding-bottom: 2pt;
+}
+
+.subrow { margin-top: 0; }
+.entry-summary { margin-top: var(--sp-1); }
+.line { margin-top: var(--sp-1); }
+.org { font-style: italic; font-weight: var(--w-regular); }
+
+/* Numbered publications, hanging indent. This is the citation convention readers
+   in this genre expect, and it lets a committee reference "item 14". */
+.pubs {
+  padding-left: 0;
+  list-style: none;
+  counter-reset: pub;
+}
+.pubs li {
+  counter-increment: pub;
+  padding-left: 22pt;
+  margin-top: var(--sp-2);
+  break-inside: avoid;
+}
+.pubs li::before {
+  content: "[" counter(pub) "]";
+  position: absolute;
+  left: 0;
+  color: var(--c-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.skills { font-size: var(--fs-body); }
+.skill-row { display: flex; gap: var(--sp-3); margin-top: var(--sp-1); break-inside: avoid; }
+.skill-row dt { font-weight: var(--w-bold); flex: 0 0 90pt; }
+.skill-row dd { flex: 1; }
+{% endblock %}

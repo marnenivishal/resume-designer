@@ -1,0 +1,10 @@
+# Core: build a resume from YAML
+pyyaml>=6.0
+jinja2>=3.1
+
+# Verification: read the finished PDF back the way a parser does
+pdfplumber>=0.10
+pypdf>=3.17
+
+# DOCX output (optional -- only needed for --format docx)
+python-docx>=1.1

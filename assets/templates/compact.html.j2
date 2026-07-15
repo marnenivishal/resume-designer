@@ -1,0 +1,82 @@
+{# compact -- for long histories that genuinely must fit.
+   Serif body (Cambria: lining + tabular figures natively) reads smaller than a sans
+   at the same point size without losing legibility, which is exactly what is needed
+   when the content is already at the limit.
+
+   This is a DENSITY variant, not a different design: same scale, same rhythm, same
+   rules. It buys roughly 20% more content per page by tightening leading and gaps,
+   never by shrinking type below 10pt. Below that a resume stops being read. #}
+{% extends "_base.html.j2" %}
+
+{% block style %}
+:root {
+  --font-body: var(--font-serif);
+  --font-head: var(--font-sans);
+  --fs-body: 10pt;
+  --lh-body: 1.26;
+  --gap-section: var(--sp-3);
+  --gap-entry: var(--sp-2);
+  --gap-bullet: 1.5pt;
+  --page-margin-y: 0.5in;
+  --page-margin-x: 0.6in;
+}
+
+.masthead {
+  padding-bottom: var(--sp-2);
+  margin-bottom: var(--sp-3);
+  border-bottom: var(--rule-thick) solid var(--c-accent);
+}
+
+/* A tempting compaction is to float the contact block right of the name. Don't:
+   that is two independent blocks side by side, and the extraction merges the
+   headline into the phone number ("Senior Backend Engineer  (206) 555-0142").
+   Stacking with an inline contact run costs ONE line and keeps the rule intact.
+   The design system does not get an exemption because the author is in a hurry. */
+.name {
+  font-size: 19pt;
+  font-weight: var(--w-bold);
+  letter-spacing: var(--tr-name);
+  line-height: var(--lh-name);
+  color: var(--c-strong);
+  display: inline;
+}
+/* Headline rides the name's line -- same record, one line saved. */
+.headline {
+  display: inline;
+  font-size: var(--fs-meta);
+  font-weight: var(--w-medium);
+  color: var(--c-accent);
+}
+.headline::before { content: "— "; color: var(--c-faint); }
+
+.contact { margin-top: var(--sp-1); font-size: var(--fs-meta); color: var(--c-muted); }
+.contact span + span::before { content: "·"; margin: 0 5pt; color: var(--c-faint); }
+
+h2 { margin-bottom: var(--sp-1); padding-bottom: 1pt; }
+
+.subrow { margin-top: 0; }
+.entry-summary { margin-top: 0; }
+.line { margin-top: 0.5pt; }
+
+.skills { font-size: var(--fs-body); }
+.skill-row { display: flex; gap: var(--sp-2); margin-top: 1pt; break-inside: avoid; }
+.skill-row dt { font-weight: var(--w-bold); flex: 0 0 72pt; }
+.skill-row dd { flex: 1; }
+
+.pubs { padding-left: 13pt; }
+.pubs li { padding-left: 2pt; margin-top: 1pt; }
+.pubs li::before { content: none; }
+{% endblock %}
+
+{% block header %}
+<header class="masthead">
+  <div class="nameline">
+    <h1 class="name">{{ basics.name }}</h1>{% if basics.headline %}<span class="headline">{{ basics.headline }}</span>{% endif %}
+  </div>
+  {% if contact_items %}
+  <div class="contact">
+    {% for c in contact_items %}<span>{{ c }}</span>{% endfor %}
+  </div>
+  {% endif %}
+</header>
+{% endblock %}

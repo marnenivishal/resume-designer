@@ -1,0 +1,85 @@
+# Example: mid/senior software engineer.
+# Every field is optional except basics.name. Delete what you don't have.
+config:
+  template: modern          # modern | classic | compact | academic
+  page: letter              # letter | a4
+  density: normal           # tight | normal | airy
+  accent: "#1F4E5F"
+  max_pages: 1
+  # stage: senior           # student|new-grad|mid|senior|executive|academic
+  #                         # omitted -> inferred from your dates
+
+basics:
+  name: Maya Ellison
+  headline: Senior Backend Engineer — Distributed Systems
+  email: maya.ellison@example.com
+  phone: "(206) 555-0142"
+  location: Seattle, WA       # city + state only. Never a street address.
+  links:
+    - label: github.com/mellison
+      url: https://github.com/mellison
+    - label: linkedin.com/in/mellison
+      url: https://linkedin.com/in/mellison
+
+# 2-3 lines, max. Cut it entirely if it only restates the bullets below.
+summary: >
+  Backend engineer with eight years building payment and order-matching systems
+  under hard latency budgets. I like the unglamorous work: correctness under
+  partial failure, and making systems observable enough to debug at 3am.
+
+experience:
+  - role: Senior Backend Engineer
+    company: Northwind Payments
+    location: Seattle, WA
+    start: 2021-03
+    end: present
+    bullets:
+      - Cut p99 checkout latency from 840ms to 190ms by replacing a synchronous
+        fan-out with a batched read path, unblocking a $12M/yr enterprise contract.
+      - Led the migration of 240M ledger rows to partitioned Postgres with zero
+        downtime and no reconciliation breaks, over 6 weeks.
+      - Designed the idempotency layer that eliminated duplicate charges, taking
+        payment incidents from ~4/quarter to 0 across 18 months.
+      - Mentored 4 engineers; 2 promoted to senior within a year.
+
+  - role: Backend Engineer
+    company: Globex Retail
+    location: Portland, OR
+    start: 2018-06
+    end: 2021-03
+    bullets:
+      - Built the inventory reservation service handling 30k req/s at peak,
+        still running unmodified 4 years later.
+      - Reduced cloud spend 38% ($410k/yr) by right-sizing read replicas and
+        killing a hot-loop that was re-fetching an unchanged catalog.
+      - Introduced contract tests across 12 services, cutting integration
+        failures in staging by roughly half.
+
+projects:
+  - name: pgshard
+    role: Author
+    summary: Postgres sharding proxy with online resharding.
+    link: github.com/mellison/pgshard
+    bullets:
+      - 2.1k GitHub stars; used in production by 3 companies I know of.
+
+education:
+  - degree: B.S. Computer Science
+    institution: University of Washington
+    location: Seattle, WA
+    start: 2014
+    end: 2018
+    summary: Minor in Mathematics.
+
+skills:
+  - group: Languages
+    items: [Go, Python, SQL, TypeScript]
+  - group: Infrastructure
+    items: [Postgres, Kafka, Kubernetes, Terraform, AWS]
+  - group: Practices
+    items: [Distributed systems, Observability, Incident response, Mentoring]
+
+certifications:
+  - name: AWS Solutions Architect — Professional
+    issuer: Amazon Web Services
+    date: 2023

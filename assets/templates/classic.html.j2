@@ -1,0 +1,76 @@
+{# classic -- conservative, serif, centred masthead.
+   For rooms where "designed" reads as a liability: law, finance, government,
+   academia, medicine, traditional corporates. Restraint IS the signal here.
+   No accent colour by default: ink only, hierarchy from type alone. #}
+{% extends "_base.html.j2" %}
+
+{% block style %}
+:root {
+  --font-body: var(--font-serif);
+  --font-head: var(--font-serif);
+  /* Ink-only. A conservative reader reads colour as decoration; decoration reads
+     as compensating for thin content. Override with config.accent if wanted.
+     NOTE the `true` -- build.py passes accent=None when unset, and None is
+     *defined* as far as Jinja is concerned, so plain default() would emit
+     "--c-accent: None", which is invalid CSS, silently discarded, leaving the teal
+     from tokens.css. Boolean mode treats None/empty as missing. */
+  --c-accent: {{ accent | default('#16181D', true) }};
+}
+
+.masthead {
+  text-align: center;
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  border-bottom: var(--rule-hair) solid var(--c-ink);
+}
+
+.name {
+  font-size: 21pt;
+  font-weight: var(--w-bold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: var(--lh-name);
+  color: var(--c-strong);
+}
+
+.headline {
+  font-size: var(--fs-title);
+  font-style: italic;
+  color: var(--c-muted);
+  margin-top: var(--sp-1);
+}
+
+.contact {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-meta);
+  color: var(--c-ink);
+}
+.contact span + span::before {
+  content: "|";
+  margin: 0 6pt;
+  color: var(--c-faint);
+}
+
+h2 {
+  /* Centred small caps with a rule under. The most durable section-heading
+     idiom in print; it has outlived every trend. */
+  text-align: center;
+  letter-spacing: 0.14em;
+  border-bottom: var(--rule-hair) solid var(--c-ink);
+  padding-bottom: 2pt;
+}
+
+.subrow { margin-top: 0; }
+.entry-summary { margin-top: var(--sp-1); }
+.line { margin-top: var(--sp-1); }
+.org { font-style: italic; font-weight: var(--w-regular); }
+
+.skills { font-size: var(--fs-body); }
+.skill-row { display: flex; gap: var(--sp-3); margin-top: var(--sp-1); break-inside: avoid; }
+.skill-row dt { font-weight: var(--w-bold); flex: 0 0 78pt; }
+.skill-row dd { flex: 1; }
+
+.pubs { padding-left: 14pt; }
+.pubs li { padding-left: 2pt; }
+.pubs li::before { content: none; }
+{% endblock %}

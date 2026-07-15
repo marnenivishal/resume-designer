@@ -1,0 +1,255 @@
+/* ============================================================================
+   resume-designer / design tokens
+   ----------------------------------------------------------------------------
+   The single source of numeric truth. DESIGN.md explains WHY each value is what
+   it is; this file is what the templates actually consume. Change a value here
+   and every template moves together. Do not hard-code these numbers in a
+   template -- that is how a design system rots.
+
+   Units are pt throughout. This is a print document; px is meaningless here.
+   ============================================================================ */
+
+:root {
+  /* --- type families -------------------------------------------------------
+     Two measured constraints shaped these stacks.
+
+     1. FIGURE STYLE. A resume is one-fifth numbers. Per-digit glyph bounds
+        (fontTools):
+          Cambria  -> lining, 1 distinct advance width. Tabular natively.
+          Georgia  -> OLD-STYLE: 9 widths, 6/8 rise to .71em, 3459 fall to
+                      -.18em. "2021-2025" visibly bounces. Corbel/Candara/
+                      Constantia/Sitka share this. Kept late; corrected by
+                      font-variant-numeric below.
+
+     2. NO VARIABLE FONTS. Measured: a variable font makes Chrome emit /Type3
+        fonts -- glyphs as drawing procedures rather than real embedded text.
+          "Segoe UI Variable Text" -> Type3      "Segoe UI" (static) -> Type0
+          "Sitka Text" (VF)        -> Type3      Cambria/Calibri     -> Type0
+        So no VF is named here, and "Inter" is deliberately absent: it usually
+        ships as InterVariable, which would silently degrade the PDF.
+        ats_check.py warns if a Type3 font sneaks in.
+
+     Every stack ends in a generic family so nothing renders as Times by accident.
+     Order: best -> most widely installed. */
+  --font-serif: "Cambria", "Charter", "Bitstream Charter",
+                "Palatino Linotype", "Book Antiqua", Georgia, serif;
+  --font-sans:  "Segoe UI", "Helvetica Neue", "Calibri", "Lato", Arial, sans-serif;
+  --font-mono:  "Consolas", "SF Mono", "Menlo", monospace;
+
+  --font-body: var(--font-serif);
+  --font-head: var(--font-sans);
+
+  /* --- type scale ----------------------------------------------------------
+     Minor third (1.2) off a 10.5pt body. Deliberately compressed: a resume is a
+     dense reference document, not an article. Hierarchy is carried by WEIGHT,
+     TRACKING, COLOR and SPACE -- not by size alone. Section headings are the
+     same size as body text on purpose; the rule + tracking + color separate them.
+     That is what keeps the page calm instead of shouty. */
+  --fs-name:    23pt;   /* the only large thing on the page */
+  --fs-title:   10.5pt; /* headline under the name */
+  --fs-h2:      9.5pt;  /* SECTION HEADINGS - small, tracked, ruled */
+  --fs-role:    11pt;   /* job title: the second-most-scanned element */
+  --fs-body:    10.5pt;
+  --fs-meta:    9.5pt;  /* dates, locations, secondary detail */
+  --fs-micro:   8.5pt;  /* page footer only */
+
+  /* --- leading -------------------------------------------------------------
+     1.32 on body: tighter than web (1.5) because measure is short and the reader
+     scans in bursts. Loose leading here would push the page count up for nothing. */
+  --lh-body:   1.34;
+  --lh-tight:  1.2;
+  --lh-name:   1.05;
+
+  /* --- weights -------------------------------------------------------------
+     Only three. More than three weights on one page reads as indecision. */
+  --w-regular: 400;
+  --w-medium:  600;
+  --w-bold:    700;
+
+  /* --- tracking ------------------------------------------------------------
+     Uppercase needs positive tracking to stay legible -- caps were never
+     designed to sit adjacent. Large type needs slight negative tracking
+     because default sidebearings are tuned for text sizes. */
+  --tr-caps:   0.09em;   /* SECTION HEADINGS */
+  --tr-name:  -0.012em;  /* optical correction at 23pt */
+  --tr-body:   0;
+
+  /* --- spacing scale -------------------------------------------------------
+     Base 3pt. Every vertical gap must be a multiple; that is the entire trick
+     behind "it just looks tidy". The eye reads consistent rhythm as competence. */
+  --sp-0:  0pt;
+  --sp-1:  3pt;
+  --sp-2:  6pt;
+  --sp-3:  9pt;
+  --sp-4:  12pt;
+  --sp-5:  15pt;
+  --sp-6:  18pt;
+  --sp-8:  24pt;
+
+  --gap-section:  var(--sp-5);  /* between major sections */
+  --gap-entry:    var(--sp-3);  /* between jobs */
+  --gap-bullet:   var(--sp-1);  /* between bullets */
+  --gap-heading:  var(--sp-2);  /* heading -> its content */
+
+  /* --- page ----------------------------------------------------------------
+     0.7in margins: the honest compromise. Below ~0.5in the page reads cramped
+     and some consumer printers clip; above ~1in you are paying a line of content
+     per side for whitespace you did not need. */
+  --page-margin-y: 0.62in;
+  --page-margin-x: 0.72in;
+
+  /* Measure control. A 7.1in text column at 10.5pt runs ~90 characters -- wider
+     than the 45-75 rule. That rule governs IMMERSIVE reading (paragraphs); resume
+     bullets are 1-2 lines and scanned, so the cost is low. Continuous prose is a
+     different case, so the summary gets capped. See DESIGN.md > Measure. */
+  --measure-prose: 6.1in;
+
+  /* --- colour --------------------------------------------------------------
+     Near-black, not #000: pure black on white is harsh in print and slightly
+     halates. #16181D keeps density without the glare.
+     Every value below passes WCAG AA (>=4.5:1) on white. */
+  --c-ink:     #16181D;  /* 15.9:1 - body */
+  --c-strong:  #000000;  /* names/roles where max weight is wanted */
+  --c-muted:   #55595F;  /* 7.2:1  - dates, locations */
+  --c-faint:   #8A8F96;  /*  3.2:1 - NON-TEXT ONLY (rules). Never for text. */
+  --c-rule:    #D8DCE0;
+  --c-accent:  #1F4E5F;  /* 8.6:1  - deep teal; one accent, used sparingly */
+  --c-paper:   #FFFFFF;
+
+  /* --- rules --------------------------------------------------------------- */
+  --rule-hair:   0.5pt;
+  --rule-thick:  1.5pt;
+}
+
+/* Density variants. Same design, three content pressures. Set via config.density.
+   These adjust ONLY rhythm and leading -- never the type scale, so the document
+   never looks like a different design. */
+.density-tight {
+  --lh-body: 1.24;
+  --gap-section: var(--sp-3);
+  --gap-entry: var(--sp-2);
+  --gap-bullet: 1.5pt;
+  --page-margin-y: 0.5in;
+  --page-margin-x: 0.6in;
+  --fs-body: 10pt;
+}
+.density-airy {
+  --lh-body: 1.45;
+  --gap-section: var(--sp-6);
+  --gap-entry: var(--sp-4);
+  --page-margin-y: 0.8in;
+  --page-margin-x: 0.9in;
+}
+
+/* ---------------------------------------------------------------------------
+   Base document
+   --------------------------------------------------------------------------- */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--c-ink);
+  background: var(--c-paper);
+  /* The single most valuable line in this file. lining-nums stops old-style
+     fonts bouncing digits below the baseline; tabular-nums gives every digit the
+     same advance width so right-aligned date columns align exactly. Verified to
+     survive Chrome's PDF printer. */
+  font-variant-numeric: lining-nums tabular-nums;
+  font-kerning: normal;
+  text-rendering: geometricPrecision;
+}
+
+/* Widow/orphan control. Chrome honours orphans/widows for block text and
+   break-inside for boxes; without these a job's heading strands alone at the
+   foot of page 1 -- the single most common way a resume looks amateur. */
+p, li { orphans: 2; widows: 2; }
+
+a { color: inherit; text-decoration: none; }
+
+/* ---------------------------------------------------------------------------
+   Shared primitives used by every template
+   --------------------------------------------------------------------------- */
+
+/* The ONLY sanctioned side-by-side construct.
+   Measured finding: text sitting side by side at the same height is merged into
+   one line by PDF text extraction, regardless of DOM order (PDF has no DOM --
+   Chrome emits glyphs in visual order). That merge is HARMLESS when both sides
+   belong to the same record ("Senior Engineer, Acme  Mar 2021 - Present") and
+   destructive when they do not ("Senior Engineer, Acme  Python, Go").
+   So: pair a record with its own metadata, never a section with another section. */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--sp-4);
+}
+/* The meta never wraps and never shrinks; the record's own text yields instead.
+   min-width:0 lets the left side actually shrink inside the flex line rather than
+   overflowing into the meta -- without it a long title pushes the date off-edge. */
+.row > .meta { white-space: nowrap; flex-shrink: 0; }
+.row > .role { min-width: 0; }
+
+/* Company/institution promoted to its own line because it was too long to sit
+   beside the meta (see _base.html.j2). Nothing is right-aligned against it, so it
+   cannot be severed by an interleaved date. */
+.orgline {
+  font-size: var(--fs-body);
+  color: var(--c-ink);
+}
+
+.meta {
+  font-family: var(--font-head);
+  font-size: var(--fs-meta);
+  color: var(--c-muted);
+}
+
+h2, .h2 {
+  font-family: var(--font-head);
+  font-size: var(--fs-h2);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--tr-caps);
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: var(--gap-heading);
+  padding-bottom: var(--sp-1);
+  border-bottom: var(--rule-hair) solid var(--c-rule);
+  /* A heading must never be the last thing on a page. */
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+section { margin-top: var(--gap-section); }
+section:first-of-type { margin-top: 0; }
+
+.entry {
+  margin-top: var(--gap-entry);
+  /* Keep a job's title with at least its first bullets. */
+  break-inside: avoid-page;
+}
+.entry:first-of-type { margin-top: 0; }
+
+.role { font-size: var(--fs-role); font-weight: var(--w-bold); color: var(--c-strong); }
+.org  { font-weight: var(--w-medium); }
+
+ul { list-style: none; margin-top: var(--sp-1); }
+li {
+  position: relative;
+  padding-left: 11pt;
+  margin-top: var(--gap-bullet);
+  break-inside: avoid;
+}
+/* Typographic bullet, optically sized and aligned. A real character (not a
+   pseudo-graphic) so it survives text extraction as plain punctuation. */
+li::before {
+  content: "\2022";
+  position: absolute;
+  left: 1pt;
+  color: var(--c-faint);
+}
+
+.prose { max-width: var(--measure-prose); }

@@ -1,0 +1,198 @@
+{# ============================================================================
+   _base.html.j2 -- structural spine for every template.
+
+   Variants inherit this and override LOOK (block styles), never STRUCTURE.
+   That is deliberate: the parse-safety properties of this document are a
+   function of its structure, so a variant cannot accidentally break them by
+   restyling. If you find yourself overriding the body blocks to move content
+   side by side, stop and read DESIGN.md > Layout.
+   ============================================================================ #}
+<!doctype html>
+<html lang="{{ config.lang | default('en') }}">
+<head>
+<meta charset="utf-8">
+<title>{{ basics.name }}{% if basics.headline %} — {{ basics.headline }}{% endif %}</title>
+<style>
+{{ tokens_css }}
+
+@page {
+  size: {{ 'A4' if page == 'a4' else 'Letter' }};
+  margin: var(--page-margin-y) var(--page-margin-x);
+}
+{% if accent %}
+:root { --c-accent: {{ accent }}; }
+{% endif %}
+{% block style %}{% endblock %}
+</style>
+</head>
+<body class="density-{{ density | default('normal') }}">
+
+{% block header %}
+<header class="masthead">
+  <h1 class="name">{{ basics.name }}</h1>
+  {% if basics.headline %}<div class="headline">{{ basics.headline }}</div>{% endif %}
+  {% if contact_items %}
+  <div class="contact">
+    {% for c in contact_items %}<span>{{ c }}</span>{% endfor %}
+  </div>
+  {% endif %}
+</header>
+{% endblock %}
+
+{% block body %}
+
+{% if summary %}
+<section class="summary">
+  <h2>{{ labels.summary | default('Summary') }}</h2>
+  <p class="prose">{{ summary | trim }}</p>
+</section>
+{% endif %}
+
+{% for sec in section_order %}
+
+{% if sec == 'experience' and experience %}
+<section>
+  <h2>{{ labels.experience | default('Experience') }}</h2>
+  {% for job in experience %}
+  <article class="entry">
+    {# The sanctioned side-by-side: a record beside ITS OWN metadata. Extraction
+       merges this to "Senior Engineer, Acme  Seattle, WA · Mar 2021 - Present" --
+       still true, so the merge is harmless. Location rides in the meta rather than
+       taking a line of its own: a dedicated location line costs one line PER JOB
+       and carries less information than a single bullet.
+
+       BUT the left side must fit on ONE line. Measured: if it wraps, the
+       right-aligned meta stays on line 1 and injects itself INTO the wrapped text --
+       "SVP Partnerships, Northwind | Seattle, WA - Jan 2020" / "Global Holdings
+       International". The parser then reads the employer as "Northwind Seattle, WA"
+       and orphans the rest. So when role+company is too long to sit beside the meta,
+       the company drops to its own line, where nothing can collide with it. #}
+    {% set inline_org = job.company and (job.role ~ ', ' ~ job.company) | length <= 58 %}
+    <div class="row">
+      <div class="role">{{ job.role }}{% if inline_org %}<span class="org-sep">, </span><span class="org">{{ job.company }}</span>{% endif %}</div>
+      <div class="meta">{% if job.location %}{{ job.location }}{% if job.start or job.end %} · {% endif %}{% endif %}{{ job | daterange }}</div>
+    </div>
+    {% if job.company and not inline_org %}<div class="org orgline">{{ job.company }}</div>{% endif %}
+    {% if job.note %}<div class="meta note">{{ job.note }}</div>{% endif %}
+    {% if job.summary %}<p class="entry-summary prose">{{ job.summary }}</p>{% endif %}
+    {% if job.bullets %}
+    <ul>
+      {% for b in job.bullets %}<li>{{ b }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if sec == 'projects' and projects %}
+<section>
+  <h2>{{ labels.projects | default('Projects') }}</h2>
+  {% for p in projects %}
+  <article class="entry">
+    <div class="row">
+      <div class="role">{{ p.name }}{% if p.role %}<span class="org-sep">, </span><span class="org">{{ p.role }}</span>{% endif %}</div>
+      {# link OR dates in the meta slot -- never orphaned under the bullets, where
+         it reads as a stray line rather than an attribute of the project. #}
+      <div class="meta">{% if p.start or p.end %}{{ p | daterange }}{% elif p.link %}{{ p.link }}{% endif %}</div>
+    </div>
+    {% if p.summary %}<p class="entry-summary prose">{{ p.summary }}{% if p.link and (p.start or p.end) %} <span class="meta">{{ p.link }}</span>{% endif %}</p>{% endif %}
+    {% if p.bullets %}<ul>{% for b in p.bullets %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if sec == 'education' and education %}
+<section>
+  <h2>{{ labels.education | default('Education') }}</h2>
+  {% for e in education %}
+  {% set inline_inst = e.institution and (e.degree ~ ', ' ~ e.institution) | length <= 58 %}
+  <article class="entry edu">
+    <div class="row">
+      <div class="role">{{ e.degree }}{% if inline_inst %}<span class="org-sep">, </span><span class="org">{{ e.institution }}</span>{% endif %}</div>
+      <div class="meta">{% if e.location %}{{ e.location }}{% if e.start or e.end %} · {% endif %}{% endif %}{{ e | daterange('year') }}</div>
+    </div>
+    {% if e.institution and not inline_inst %}<div class="org orgline">{{ e.institution }}</div>{% endif %}
+    {% if e.summary %}<p class="entry-summary prose">{{ e.summary }}</p>{% endif %}
+    {% if e.bullets %}<ul>{% for b in e.bullets %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+  </article>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if sec == 'skills' and skills %}
+<section>
+  <h2>{{ labels.skills | default('Skills') }}</h2>
+  <dl class="skills">
+    {% for g in skills %}
+      {% if g is mapping %}
+      {# Label beside its OWN values -- merges to "Languages Python, Go" which is
+         still semantically correct. Never a skills column beside experience. #}
+      <div class="skill-row">
+        <dt>{{ g.group }}</dt>
+        <dd>{{ g['items'] | join(', ') }}</dd>
+      </div>
+      {% else %}
+      <div class="skill-row"><dd class="wide">{{ g }}</dd></div>
+      {% endif %}
+    {% endfor %}
+  </dl>
+</section>
+{% endif %}
+
+{% if sec == 'certifications' and certifications %}
+<section>
+  <h2>{{ labels.certifications | default('Certifications') }}</h2>
+  {% for c in certifications %}
+  <div class="row line">
+    <div>{% if c is mapping %}<span class="org">{{ c.name }}</span>{% if c.issuer %} · {{ c.issuer }}{% endif %}{% else %}{{ c }}{% endif %}</div>
+    {% if c is mapping and (c.date or c.end) %}<div class="meta">{{ c.date | default(c.end) | date('year') }}</div>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% if sec == 'publications' and publications %}
+<section>
+  <h2>{{ labels.publications | default('Publications') }}</h2>
+  <ol class="pubs">
+    {% for p in publications %}
+    <li>{% if p is mapping %}{{ p.citation | default(p.title) }}{% if p.venue %} <em>{{ p.venue }}</em>{% endif %}{% if p.year %}, {{ p.year }}{% endif %}{% else %}{{ p }}{% endif %}</li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}
+
+{% if sec == 'awards' and awards %}
+<section>
+  <h2>{{ labels.awards | default('Awards') }}</h2>
+  {% for a in awards %}
+  <div class="row line">
+    <div>{% if a is mapping %}<span class="org">{{ a.name }}</span>{% if a.issuer %} · {{ a.issuer }}{% endif %}{% else %}{{ a }}{% endif %}</div>
+    {% if a is mapping and a.year %}<div class="meta">{{ a.year }}</div>{% endif %}
+  </div>
+  {% endfor %}
+</section>
+{% endif %}
+
+{% endfor %}
+
+{% for sec in custom_sections | default([]) %}
+<section>
+  <h2>{{ sec.title }}</h2>
+  {% if sec.text %}<p class="prose">{{ sec.text }}</p>{% endif %}
+  {% if sec['items'] %}
+  <ul>
+    {% for it in sec['items'] %}
+    <li>{% if it is mapping %}{{ it.text }}{% else %}{{ it }}{% endif %}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+{% endfor %}
+
+{% endblock %}
+
+</body>
+</html>

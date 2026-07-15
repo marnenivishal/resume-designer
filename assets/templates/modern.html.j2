@@ -1,0 +1,70 @@
+{# modern -- the default.
+   Sans throughout, name set left and large, one hairline under the masthead.
+   Reads contemporary without being trendy: no icons, no bars, no sidebar.
+   Good default for tech, product, design-adjacent, marketing, general industry. #}
+{% extends "_base.html.j2" %}
+
+{% block style %}
+:root {
+  --font-body: var(--font-sans);
+  --font-head: var(--font-sans);
+}
+
+.masthead {
+  padding-bottom: var(--sp-3);
+  margin-bottom: var(--sp-5);
+  border-bottom: var(--rule-thick) solid var(--c-accent);
+}
+
+.name {
+  font-size: var(--fs-name);
+  font-weight: var(--w-bold);
+  letter-spacing: var(--tr-name);
+  line-height: var(--lh-name);
+  color: var(--c-strong);
+}
+
+.headline {
+  font-size: var(--fs-title);
+  font-weight: var(--w-medium);
+  color: var(--c-accent);
+  margin-top: var(--sp-1);
+}
+
+.contact {
+  margin-top: var(--sp-2);
+  font-size: var(--fs-meta);
+  color: var(--c-muted);
+}
+/* Separator drawn with a pseudo-element so it is decoration, not data: it never
+   lands in the extracted text, so a parser reading the contact line sees
+   "jane@x.com  555-0100  Seattle" rather than characters it has to strip. */
+.contact span + span::before {
+  content: "·";
+  margin: 0 6pt;
+  color: var(--c-faint);
+}
+
+.subrow { margin-top: 0; }
+.entry-summary { margin-top: var(--sp-1); }
+.line { margin-top: var(--sp-1); }
+
+.skills { font-size: var(--fs-body); }
+.skill-row {
+  display: flex;
+  gap: var(--sp-3);
+  margin-top: var(--sp-1);
+  break-inside: avoid;
+}
+.skill-row dt {
+  font-weight: var(--w-bold);
+  color: var(--c-strong);
+  flex: 0 0 78pt;
+}
+.skill-row dd { flex: 1; }
+.skill-row dd.wide { margin-left: 0; }
+
+.pubs { padding-left: 14pt; }
+.pubs li { padding-left: 2pt; }
+.pubs li::before { content: none; }
+{% endblock %}
