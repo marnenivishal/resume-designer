@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1408" height="878" viewBox="0 0 1408 878" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif">
+<rect width="1408" height="878" fill="#ffffff"/>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L10,5 L0,10 z" fill="#1e1e1e"/></marker></defs>
+<rect x="24.0" y="144.0" width="200.0" height="80.0" rx="6" fill="#a5d8ff" fill-opacity="1.00" stroke="#1971c2" stroke-width="2"/>
+<rect x="314.0" y="144.0" width="200.0" height="80.0" rx="6" fill="#eebefa" fill-opacity="1.00" stroke="#9c36b5" stroke-width="2"/>
+<rect x="604.0" y="144.0" width="200.0" height="80.0" rx="6" fill="#eebefa" fill-opacity="1.00" stroke="#9c36b5" stroke-width="2"/>
+<rect x="894.0" y="144.0" width="200.0" height="80.0" rx="6" fill="#99e9f2" fill-opacity="1.00" stroke="#0c8599" stroke-width="2"/>
+<rect x="24.0" y="324.0" width="1360.0" height="60.0" rx="6" fill="#ffd8a8" fill-opacity="1.00" stroke="#e8590c" stroke-width="3"/>
+<rect x="24.0" y="434.0" width="660.0" height="250.0" rx="6" fill="#a5d8ff" fill-opacity="0.15" stroke="#1971c2" stroke-width="1" stroke-dasharray="8 5"/>
+<rect x="724.0" y="434.0" width="660.0" height="250.0" rx="6" fill="#b2f2bb" fill-opacity="0.15" stroke="#2f9e44" stroke-width="1" stroke-dasharray="8 5"/>
+<rect x="24.0" y="724.0" width="1360.0" height="130.0" rx="6" fill="#ffffff" fill-opacity="1.00" stroke="#e03131" stroke-width="2"/>
+<path d="M232.0,184.0 L306.0,184.0" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#ah)" opacity="1.00"/>
+<path d="M522.0,184.0 L596.0,184.0" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#ah)" opacity="1.00"/>
+<path d="M812.0,184.0 L886.0,184.0" fill="none" stroke="#1e1e1e" stroke-width="2" marker-end="url(#ah)" opacity="1.00"/>
+<path d="M918.9,228.0 L762.1,320.0" fill="none" stroke="#e8590c" stroke-width="3" marker-end="url(#ah)" opacity="1.00"/>
+<text x="24.0" y="56.0" font-size="32" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#1e1e1e" opacity="1.00" xml:space="preserve">The loop nobody else closes</text>
+<text x="24.0" y="84.0" font-size="16" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">Every resume tool builds. This one reads its own output back — as a parser, and as pixels — and tells you when it broke.</text>
+<text x="24.0" y="104.0" font-size="16" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">Of 177 commercial templates surveyed, not one verifies its own output.</text>
+<text x="42.0" y="183.0" font-size="17" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1971c2" opacity="1.00" xml:space="preserve">resume.yaml</text>
+<text x="42.0" y="205.0" font-size="13" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">one source of truth</text>
+<text x="332.0" y="183.0" font-size="17" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#9c36b5" opacity="1.00" xml:space="preserve">jinja → HTML</text>
+<text x="332.0" y="205.0" font-size="13" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">structure is fixed here</text>
+<text x="622.0" y="182.0" font-size="16" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#9c36b5" opacity="1.00" xml:space="preserve">headless Chrome</text>
+<text x="622.0" y="205.0" font-size="13" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#868e96" opacity="1.00" xml:space="preserve">--print-to-pdf</text>
+<text x="912.0" y="176.0" font-size="16" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#0c8599" opacity="1.00" xml:space="preserve">PDF · DOCX · TXT</text>
+<text x="912.0" y="203.0" font-size="13" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">the thing you send</text>
+<text x="1124.0" y="186.0" font-size="16" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#e03131" opacity="1.00" xml:space="preserve">← most tools stop here</text>
+<text x="48.0" y="362.0" font-size="20" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#e8590c" opacity="1.00" xml:space="preserve">read the finished PDF back — the artifact itself, not the HTML you hoped for</text>
+<text x="48.0" y="472.0" font-size="20" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1971c2" opacity="1.00" xml:space="preserve">ats_check.py — what the MACHINE sees</text>
+<text x="48.0" y="498.0" font-size="14" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">re-extracts with pdfplumber + pypdf</text>
+<text x="48.0" y="527.0" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">order      sections extract as written</text>
+<text x="48.0" y="545.8" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">bleed      no two unrelated blocks merged</text>
+<text x="48.0" y="564.5" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">fonts      really embedded, no silent fallback</text>
+<text x="48.0" y="583.2" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">contact    email + phone survive as regex</text>
+<text x="48.0" y="602.0" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">paint      rasterised — pixels, not coordinates</text>
+<text x="48.0" y="620.8" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">size       under Greenhouse's 2.5MB parse limit</text>
+<text x="748.0" y="472.0" font-size="20" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#2f9e44" opacity="1.00" xml:space="preserve">micro_qa.py — what a HUMAN sees</text>
+<text x="748.0" y="498.0" font-size="14" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#868e96" opacity="1.00" xml:space="preserve">measures the rendered page</text>
+<text x="748.0" y="527.0" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">runt       no single-word last lines</text>
+<text x="748.0" y="545.8" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">rhythm     every gap on the 3pt scale</text>
+<text x="748.0" y="564.5" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">dates      the right rail aligns to ±0px</text>
+<text x="748.0" y="583.2" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">bullets    one left edge, ±0px</text>
+<text x="748.0" y="602.0" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">margins    symmetric</text>
+<text x="748.0" y="620.8" font-size="15" font-family="'Cascadia Code', Consolas, 'SF Mono', Menlo, monospace" fill="#1e1e1e" opacity="1.00" xml:space="preserve">pages      from the PDF — never from the DOM</text>
+<text x="48.0" y="761.0" font-size="19" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#e03131" opacity="1.00" xml:space="preserve">Why bother? Because every other instrument lied.</text>
+<text x="48.0" y="789.0" font-size="15" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#1e1e1e" opacity="1.00" xml:space="preserve">The HTML preview looked perfect — screens have no page margin box.</text>
+<text x="48.0" y="807.8" font-size="15" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#1e1e1e" opacity="1.00" xml:space="preserve">The PDF's own coordinates said the masthead bled to the paper edge (x0 = −6.7pt) — Chrome had CLIPPED it, and the name sat flush against the cut.</text>
+<text x="48.0" y="826.5" font-size="15" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#1e1e1e" opacity="1.00" xml:space="preserve">The DOM said "1 page, 4% full" — the PDF was 2 pages at 94%.</text>
+<text x="48.0" y="845.2" font-size="15" font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif" fill="#1e1e1e" opacity="1.00" xml:space="preserve">Only the raster told the truth. That is the whole reason this loop exists.</text>
+</svg>

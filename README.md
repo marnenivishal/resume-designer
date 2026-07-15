@@ -32,6 +32,8 @@ python scripts/build.py resume.yaml --format pdf,docx,txt --check
 
 ## What makes it different
 
+<img src="docs/the-verify-loop.svg" alt="The verify loop: resume.yaml to HTML to Chrome to PDF — then read the finished PDF back with ats_check.py (what the machine sees) and micro_qa.py (what a human sees). Most tools stop at the PDF." width="100%">
+
 **It verifies instead of claiming.** `ats_check.py` re-extracts the finished PDF the
 way a parser does and proves the text layer is intact — reading order, no fabricated
 lines, fonts genuinely embedded, contact details findable. Every other tool in this
@@ -60,6 +62,8 @@ demands it) · TXT (paste into web forms) · HTML (preview).
 ---
 
 ## The finding that shaped the design
+
+<img src="docs/why-single-column.svg" alt="PDF has no DOM: Chrome paints glyphs at visual positions, so extraction merges anything on the same row. A sidebar produces a line nobody wrote; a record beside its own dates merges but stays true." width="100%">
 
 **PDF has no DOM.** Chrome emits glyphs in *visual* position order, so anything
 side-by-side at the same height is merged into one line at extraction. Measured
