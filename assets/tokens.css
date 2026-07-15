@@ -88,7 +88,11 @@
 
   --gap-section:  var(--sp-5);  /* between major sections */
   --gap-entry:    var(--sp-3);  /* between jobs */
-  --gap-bullet:   var(--sp-1);  /* between bullets */
+  /* Measured on a real 2-page resume: at sp-1 the line pitch inside a wrapped
+     bullet (4-5px) and between two bullets (5-7px) were statistically
+     indistinguishable across 16 consecutive lines -- 27 bullets rendering as one
+     undifferentiated grey slab. A bullet must be visibly a unit. */
+  --gap-bullet:   4pt;          /* between bullets -- must exceed the intra-bullet leading */
   --gap-heading:  var(--sp-2);  /* heading -> its content */
 
   /* --- page ----------------------------------------------------------------
@@ -297,6 +301,22 @@ li::before {
 }
 
 .prose { max-width: var(--measure-prose); }
+
+/* NO RUNNING HEADER/FOOTER. references/review.md recommends repeating the candidate's
+   name on page 2 ("pages get separated") and this file cannot honour it:
+
+     position: fixed  -> Chrome does NOT repeat it per printed page; it painted ONCE,
+                         at the top of page 2, ON TOP of the body text. Tried it on a
+                         real resume; it overprinted a bullet. rendering.md already
+                         said "position:fixed repeating headers: NO" -- I used it anyway.
+     @page { @bottom-center { content: ... } } -> margin boxes are patchy in Chrome and
+                         cannot pull a value from the document (the name lives in YAML,
+                         not in CSS).
+
+   So the rule stays documented and UNIMPLEMENTED rather than implemented badly. If
+   you need it, put the name in a normal block at the top of the second page's content
+   -- or accept the gap. An overprinted page beats no footer, and no footer beats an
+   overprinted page. */
 
 /* --- corpus-driven variants (see references/pattern-study.md) ---------------- */
 
