@@ -1,199 +1,257 @@
-# Pattern study — 153 premium templates, counted
+# Pattern study — 177 premium templates, counted
 
-What the commercial and design-led market actually ships, surveyed rather than assumed,
-and what this design system takes from it.
+What the commercial and design-led market actually ships, surveyed rather than
+assumed, and what this design system takes from it.
 
-The point of counting is that resume design advice is mostly assertion. "Right-aligned
-dates are the premium pattern" is the kind of claim that sounds right and dissolves on
+The point of counting is that resume design advice is mostly assertion. *"Right-aligned
+dates are the premium pattern"* is the kind of claim that sounds right and dissolves on
 contact with a tally — see §3.
 
 ---
 
 ## 1. Method, and its limits
 
-**Corpus:** 153 distinct templates catalogued across 9 sources by 10 parallel research
-agents (Nov 2025 – Jul 2026 galleries), plus direct visual inspection by the author of
-Enhancv, Novorésumé, Kickresume, and Standard Resume.
+**Corpus:** 177 distinct templates catalogued across 10 source groups by parallel
+research agents (2025–2026 galleries), plus direct visual inspection by the author of
+Enhancv, Novorésumé, Kickresume and Standard Resume.
 
-| Source | Templates | Notes |
-|---|---|---|
-| Rezi | 28 | positions hardest on ATS |
-| Kickresume | 22 | Zety **not fetchable** — 0 recorded rather than guessed |
-| Enhancv | 21 | gallery-level only, no per-template pages |
-| Resume.io | 18 | incl. `/ats`, `/two-column`, `/picture` category pages |
-| Canva | 18 | |
-| Adobe Express | 16 | |
-| Figma Community | 14 | |
-| Novorésumé | 12 | |
-| Microsoft Create | 4 | JS SPA; **no template visually examined** |
+| Source | Templates |
+|---|---|
+| Behance / Dribbble (design-led) | 24 |
+| Rezi | 20 |
+| Kickresume | 22 |
+| Enhancv | 21 |
+| Resume.io | 18 |
+| Canva | 18 |
+| Adobe Express | 16 |
+| Figma Community | 14 |
+| Novorésumé | 12 |
+| Standard Resume | 8 |
+| Microsoft Create | 4 |
+| **Teal, Zety** | **0 — Cloudflare 403 on every route; recorded zero rather than guessed** |
 
-### What this survey cannot tell you `[IMPORTANT]`
+### Denominators, because they move the answer `[IMPORTANT]`
 
 Read this before trusting any number below.
 
-- **Most fetching returns markdown, which has no layout.** `heading_treatment` is
-  null/unknown for ~38% of the corpus; `date_alignment` for ~44%. Those fields are
-  **not reliable** and no conclusion here rests on them alone.
+- **Most fetching returns markdown, which has no layout.** 35 of 177 templates have
+  `columns: unknown`; 71 have no observable `date_alignment`; 23 have no
+  `accent_colors`. **Rates computed over 177 understate every attribute** — so every
+  rate here is quoted over its *observable subset*, with n stated.
 - **`false` mostly means "no evidence found", not "confirmed absent."** The Resume.io
-  and Enhancv surveyors both flagged this explicitly and unprompted. Icon and
-  skill-bar counts are therefore **floors, not totals** — the true numbers are higher.
-- **Teal, Zety, and Behance/Dribbble were not fetchable.** Zero recorded rather than
-  fabricated. The design-led gallery gap matters: Behance/Dribbble would almost
-  certainly push the sidebar and photo counts **up**.
-- **One agent caught its own tool hallucinating**, verbatim: *"DATA-INTEGRITY WARNING —
-  one of my own tools fabricated layout data: my first WebFetch of the Rezi gallery
-  confabulated…"* It discarded the result and re-fetched. Assume the rest of the
-  corpus has some of this and treat single-source claims accordingly.
+  and Enhancv surveyors flagged this themselves, unprompted. Icon and bar counts are
+  **floors**.
+- **Per-source prose miscounts its own records in at least six places.** Adobe's
+  summary claims "11 of 16 sidebar" — its records say 9; Figma claims 8 of 14, records
+  say 5; Behance claims 11 of 24 bars, records say 9. **Every count below is recomputed
+  from the per-record fields, not the prose.** (An earlier version of this document
+  quoted the prose. It was wrong.)
+- **One agent caught its own tool fabricating layout data** — verbatim: *"DATA-INTEGRITY
+  WARNING — one of my own tools fabricated layout data: my first WebFetch of the Rezi
+  gallery confabulated…"* It discarded and re-fetched.
 
-A survey that names its own holes is worth more than one that reports a clean 100.
+A survey that names its own holes is worth more than one reporting a clean 100.
 
 ---
 
 ## 2. What recurs
 
-Counts across n=153 unless stated.
+### 2.1 Structure (n=142 with known columns)
 
-| Pattern | Count | Share |
+| Layout | n | % of known |
 |---|---|---|
-| **Two-column (any)** | 86 | **56%** |
-| — of which a true sidebar | 40 | 26% |
-| — two-column content split | 28 | 18% |
-| — hybrid | 18 | 12% |
-| **Single column** | 33 | **22%** |
-| Undetermined | 34 | 22% |
-| **Photo** | 47+ | **38%+** |
-| **Decorative icons** | 61+ | **50%+** (floor) |
-| **Skill rating bars/dots/rings** | 21+ | **17%+** |
-| **≤1 accent hue** | 83 | **67%** |
+| **Two-column, any** (47 sidebar + 33 content-split) | **80** | **56%** |
+| Single | **36** | 25% |
+| Hybrid | 26 | 18% |
 
-**Multi-column outnumbers single column roughly 2.6 : 1.** This is the market. The
-design this system ships is a minority position, and that is a deliberate choice made
-against a measurement, not an aesthetic preference.
+**Two-column is the majority of everything observable.** This system ships the 25%
+position — deliberately, against a measurement, not a preference.
 
-### Design-led vs ATS-led sources diverge sharply
+### 2.2 The two universals — zero counterexamples in 177
 
-| | Sidebar-heavy | Skill bars | Photos |
-|---|---|---|---|
-| **Kickresume** (n=22) | 20/22 multi-col | **14/22** | **17/22** |
-| **Adobe Express** (n=16) | **11/16 sidebar**, only 2 single | 2/16 | — |
-| **Figma Community** (n=14) | 8/14 sidebar | **0/14 — extinct** | circular crops |
-| **Novorésumé** (n=12) | **10/12 multi-col** | 4/12 | 6/12 |
-| **Rezi** (n=28) | *"single-column is absolute"* | **0/28** | 1/28 |
+1. **The name is the largest element and sits at the top.** Canva: *"the single most
+   invariant structure in the set"* (18/18). Behance: *"the largest element on the page
+   in every single piece"* (24/24). Novorésumé 12/12.
+2. **ALL-CAPS section heading + a delimiter rule.** *"Near-universal heading grammar"*
+   (Behance), *"universal — 12 of 12"* (Novorésumé). Kickresume is the lone dissenter.
 
-The service that optimises hardest for parsing ships the layout this system ships.
-The services that optimise for gallery appeal ship the opposite. That is the whole
-story of the category in one table.
+This system does both.
+
+### 2.3 Chromatic restraint is near-total (n=154 scored)
+
+| accent hues | n | % |
+|---|---|---|
+| 0 | 29 | 19% |
+| 1 | 93 | 60% |
+| **≤1** | **122** | **79%** |
+| ≥3 | **4** | **2.6%** |
+
+Three of the four maximalist outliers are **collections or self-branded personal CVs,
+not products**. Maximalism is functionally extinct in shipped commercial work.
+
+### 2.4 Skill bars are a legacy tail, not a norm — and 31 of 32 have no scale
+
+**32/177 (18%)**, but 23 come from just two sources (Kickresume 14/22, Behance 9/24).
+The modern cohort ships **zero**: Figma 0/14, Enhancv 0/21, Rezi 0/20, Standard Resume
+0/8.
+
+**Of the 32, exactly one has a scale** (Novorésumé *Tech*, with an axis tick). The other
+31 are, in the corpus's words, *"unlabelled… no legend, no units, no baseline. Purely
+decorative rhetoric."* Kickresume's `Pipeline` asserts **"72% Teamwork"** against
+nothing at all.
+
+### 2.5 Design-led vs ATS-led disagree on everything except type
+
+| | Design-led (Behance+Figma) | ATS-led (Rezi+Standard) |
+|---|---|---|
+| single column | **8/37 (22%)** | **6/8 (75%)** |
+| two-column any | 19/37 (51%) | 1/8 (13%) |
+| photo | **21/38 (55%)** | **1/28 (4%)** |
+| skill bars | **9/38 (24%)** | **0/28** |
+| ≤1 accent | 25/38 (66%), max 6 | **28/28 (100%), max 1** |
+| **icons** | **20/38 (53%)** | **20/28 (71%)** ← inversion |
+
+Both ATS-led heterodoxies (a sidebar, a photo) belong to **Standard Resume — the source
+that doesn't market on ATS at all.** Rezi, which does, ships 0 sidebars, 0 photos,
+0 bars, ≤1 hue across 20 templates.
 
 ---
 
 ## 3. The claim that dissolved on counting
 
-Earlier research (and most design blogs) told me:
+Earlier research told me: *"Right-aligned dates are the dominant premium pattern."*
 
-> *"Right-aligned dates are the dominant premium pattern."*
-
-The corpus says otherwise:
-
-- **Adobe Express: 0 of 16** use right-aligned dates.
-- **Canva:** dates cluster into *two* conventions — right-aligned **or** inline with
-  the employer. Not one dominant.
-- Corpus-wide: 18 right-aligned vs 31 left-under-title vs 30 inline — **with 44%
-  undetermined**, so nobody should claim a winner.
-
-**Consequence for this system:** right-aligned dates are a *legitimate* convention, not
-*the* convention. Shipping only that was a gap. See §6.
-
----
-
-## 4. Adopted — patterns the corpus supports and this system already does
-
-| Pattern | Corpus evidence | Status |
+| Convention | n | % of 105 observable |
 |---|---|---|
-| **One accent hue** | 83/153 (67%); Adobe **14/16**; Canva 12/18 use 0–1 | shipped: exactly one accent, ≤3 uses |
-| **ALL-CAPS section headings + rule** | Novorésumé **12/12**; Canva "dominant heading treatment" | shipped: 9.5pt, +0.09em tracking, hairline rule |
-| **Name largest, at top** | Canva: *"always the largest element and always at the top"* | shipped: 23pt (26pt banded), left or centred |
-| **Restraint over decoration** | Figma: skill bars **0/14**, 0–1 hues | shipped: bars/dots/stars banned |
-| **Single column** | Rezi **28/28**; Standard Resume's own copy: *"Recruiters love the one-column layout"* | shipped: the core rule |
-| **Generous whitespace at the header** | recurring across sources | shipped: masthead + rule |
+| left-under-title | **42** | **40%** |
+| inline | 34 | 32% |
+| **right-aligned** | **21** | **20%** |
+| sidebar | 8 | 8% |
 
-The header idiom — **large name, thin rule, single-line contact** — recurs across
-essentially every source and is what this system's masthead already is.
+Right-aligned is a **Canva + Rezi habit and nothing else**. **Adobe (0/15), Novorésumé
+(0/12) and Kickresume (0/22) ship zero right-aligned dates between them — 49 templates,
+no date rail.**
+
+This system shipped only the 20% convention — the one that *needs a conditional*
+(§5.1). `date_style: inline` was added because of this count.
+
+> **The causal insight, and it is this system's best-earned point:** two sources mention
+> fonts at all; **zero mention figure style.** This is the only artifact in the corpus
+> that noticed Georgia's old-style figures make a date rail bounce — *which is precisely
+> why the three sources with no tabular figures ship no date rail.* You cannot align a
+> date column with proportional digits. They didn't fail to think of it; they lacked the
+> prerequisite.
 
 ---
 
-## 5. Rejected — recurring patterns this system refuses
+## 4. Adopted
 
-Honest about *why*, because the reasons are not equally strong.
+| Shipped rule | Corpus evidence |
+|---|---|
+| ALL-CAPS headings + hairline rule | the corpus's #1 invariant |
+| Name largest, at top | the corpus's #0 invariant — 0 counterexamples in 177 |
+| One accent hue | 122/154 (79%) |
+| **Accent on employer names** | Canva *Science and Engineering*: *"accent carries semantic weight rather than being purely decorative — **the sharpest use of a single hue in the sample**"* |
+| **Words, not bars** | Behance *Resume Layout*: skills in words — *"**the single best decision in the whole survey and a direct rebuke to the bar convention**"* |
+| Full-bleed masthead band | ~15–18 templates; resume.io's own /creative formula is *"a strong block of color at the top"*. **This is the corpus's most conventional premium gesture — not an invention.** |
+| Static fonts, native tabular figures | **Zero corpus coverage.** Nothing else here noticed. |
+| ≥4.5:1 contrast, greyscale survival, 3pt scale | **Zero corpus coverage.** No vendor mentions contrast, print, or a spacing scale. |
+
+---
+
+## 5. What the audit found wrong with *this* system
+
+### 5.1 A shipped defect — fixed
+
+The org-drop rule (`role + ", " + company` over ~58 chars → company to its own line) was
+applied **per record**. A four-job resume could render three entries with a date rail and
+the fourth as a two-line block: **two date conventions in one document** — exactly the
+defect the survey holds against Canva's *Minimalist White and Grey*.
+
+**Fixed:** promoted to **document scope**. If any record trips the limit, all records
+adopt the dropped form. Consistency beats compactness.
+
+### 5.2 The threshold was paper-independent, and can't be — fixed
+
+A constant measured in *characters* cannot be paper-independent: A4 is 6mm narrower than
+Letter. **Fixed:** 55 for A4, 58 for Letter.
+
+### 5.3 The icon ban was overbroad — corrected
+
+Shipped rule: *"no icons for contact details."* But **Rezi — the most parse-serious
+vendor in the corpus — puts contact glyphs on 20 of 20 templates** while its own docs ban
+columns, bars and percentages. The ATS camp out-decorates the design camp (71% vs 53%).
+
+They are not wrong, and neither was the ban's *intent*. The distinction the rule missed:
+
+- **Icon *replacing* text** — Novorésumé, 12/12, *no template labels contact as plain
+  text*. The glyph carries the meaning. **This is the real defect.**
+- **Icon *beside* text** — Rezi's pattern. `✉ jane@x.com` still regex-matches. Harmless
+  decoration; earns nothing, breaks nothing.
+
+**Corrected rule:** an icon must never *replace* text. Beside it, it is merely pointless.
+
+### 5.4 Cambria reads as Word — acknowledged
+
+Cambria is technically the best font decision here (static, native lining + tabular).
+It is also **the default serif of Microsoft Word 2007–2010**. Standard Resume — the most
+typographically disciplined source — reaches for IBM Plex Serif and EB Garamond instead.
+**Added:** `mono-head` type pairing. Mono is lining + tabular **by construction** — zero
+figure-style risk, a perfect date rail, and **1 of 177** templates differentiates on it
+(Standard Resume *Keefer*), making it a differentiator rather than table stakes.
+
+### 5.5 The monogram — adopted
+
+The corpus's only honest answer to *"what goes where the photo isn't"*. Dribbble's
+*John Doe monogram*: *"the **only piece in the survey to solve the photo problem rather
+than indulge it, and worth stealing**"*. Standard Resume uses one as its signature.
+
+It passes this system's own test: `ME Maya Ellison` — a merged line that stays true.
+**Added:** `monogram: true`.
+
+---
+
+## 6. Rejected
 
 | Pattern | Corpus | Refused because | Grade |
 |---|---|---|---|
-| Sidebar / two-column | **86/153 (56%)** | **Measured:** side-by-side blocks merge into fabricated lines at extraction. Reordering the DOM does not help. | `[MEASURED]` |
-| Tables for layout | common in Word templates | **Measured:** worst performer of five strategies tested | `[MEASURED]` |
-| Skill rating bars/rings | 21+/153; Kickresume 14/22 | Invented precision. Kickresume's `Pipeline` ships **"72% Teamwork", "85% Communication"** — against what scale? Invisible to parsers, and occupies space evidence should. Figma has already abandoned them (0/14). | `[CONVENTION]` |
-| Decorative contact icons | **61+/153 (50%+)**; Novorésumé **12/12** | A glyph is not text. Novorésumé labels contact details as icons in **all 12** templates — no plain-text label anywhere. | `[CONVENTION]` |
-| Photo | 47+/153 (38%+); Kickresume 17/22 | Legal exposure in US/UK/CA/AU; a field experiment found photos measurably harm women | `[ESTABLISHED]` |
-| Full address / nationality | Kickresume `iMessage` ships **"Nationality: American"** + street address | PII leak; evidentiary discrimination risk in the US | `[ESTABLISHED]` |
+| Sidebar / two-column | **80/142 (56%)** | **Measured:** side-by-side blocks merge into fabricated lines; DOM order is not a lever in a PDF | `[MEASURED]` |
+| Tables for layout | Microsoft Support: *"Many templates use tables to streamline the layout"* | **Measured:** worst of five strategies tested | `[MEASURED]` |
+| Skill bars | 32/177; **31 of 32 have no scale** | Invented precision — "72% Teamwork" against what? Figma already abandoned them (0/14) | `[CONVENTION]` |
+| Photo | 47+/177 | Legal exposure US/UK/CA/AU; a field experiment found photos measurably harm women | `[ESTABLISHED]` |
+| Full address / nationality | Kickresume *iMessage* ships **"Nationality: American"** + street address | PII leak; evidentiary discrimination risk | `[ESTABLISHED]` |
 
-> **The category's central dishonesty.** Services making the *loudest* ATS claims ship
-> the layouts most likely to break parsing:
-> - **Resume.io** contradicts itself inside one site: markets templates "created with
->   automated resume scanners in mind", ships one named **"Two Column ATS (Brussels)"**,
->   while its own `/ats` page says *"Use a single-column layout."*
-> - **Enhancv** badges its whole catalogue ATS-friendly and asserts *"yes, even with pie
->   charts, icons, and modern two-column layouts."*
-> - **Novorésumé**: *"all our resume templates are entirely ATS-friendly"* — 10/12 are
->   multi-column and 12/12 render contact as icon glyphs.
-> - **Kickresume** puts templates **with photos** inside its own *ATS-friendly* category.
-> - **Rezi** gets the layout right and still repeats the debunked *"75% of resumes are
->   rejected before a human ever sees them."*
-> - **Canva and Adobe Express make no ATS claim at all.** They sell "captivating".
->   Honest by omission — and the only two in the set not asserting something unverified.
-
----
-
-## 6. Missed — good patterns the corpus has and this system lacked
-
-The most useful section. Two real gaps, both corpus-driven, both now closed:
-
-1. **Inline dates.** Right-aligned is *a* convention, not *the* convention (§3 — Adobe
-   0/16). Some content simply reads better with the date inline after the employer, and
-   it is equally parse-safe (the merged line stays true either way). **Added:**
-   `date_style: right | inline`.
-
-2. **Skills as pill/tag chips.** Novorésumé's house pattern (**10/12**), also on Canva
-   and Resume.io. Visually distinctive, and — unlike a sidebar — genuinely single-column
-   safe, because pills are inline-flowing text that extracts as a plain comma run.
-   **Added:** `skills_style: rows | pills`, verified to extract cleanly.
-
-Considered and **not** taken:
-- **Circular photo crops** (Figma's universal treatment) — the objection to photos is
-  legal, not aesthetic; a nicer crop does not fix it.
-- **Pill-shaped section headings**, gradient bands, sidebar skill clouds — decoration
-  that buys nothing a parser or a reader can use.
+> **The category's central dishonesty.** The loudest ATS claims come with the layouts
+> most likely to break parsing:
+> - **Resume.io** contradicts itself inside one site: ships **"Two Column ATS
+>   (Brussels)"** while its own `/ats` page says *"Use a single-column layout."*
+> - **Enhancv** badges its whole catalogue and asserts *"yes, even with pie charts,
+>   icons, and modern two-column layouts."*
+> - **Novorésumé**: *"entirely ATS-friendly"* — 10/12 multi-column, 12/12 icon-only contact.
+> - **Kickresume** puts templates **with photos** inside its own ATS category.
+> - **Rezi** gets the layout right and still repeats the debunked *"75% are rejected."*
+> - **Canva and Adobe Express make no ATS claim at all.** They sell "captivating" — the
+>   only two not asserting something unverified.
 
 ---
 
 ## 7. Verdict
 
-**Would this sit credibly beside the corpus?** Yes on typography, hierarchy, restraint,
-and colour discipline — it matches or exceeds the median of what is sold, and the
-`signature` full-bleed band gives it the "designed" register that the paid galleries
-compete on.
+**Matches or exceeds the corpus on:** both universals, colour discipline (79% cohort),
+the corpus's single best-reviewed idea (words not bars), and typographic control nothing
+else here attempts — contrast, greyscale survival, figure style, a spacing scale.
 
-**Where it loses, honestly:**
-- **No photo option for markets that expect one** (Switzerland, Germany, Japan). Gated
-  deliberately in `variants.md`, but a Swiss applicant is genuinely not served today.
-- **No pictorial personality.** Canva and Behance sell delight; this sells evidence. For
-  a graphic designer whose resume *is* the portfolio, the `portfolio` track exists — but
-  it is one template, not a gallery.
-- **Fewer skeletons than the big builders** (6 vs Resume.io's ~38 named designs). 107
-  presets is more *looks*, but fewer distinct *structures* — by choice, since structure
-  is what carries the parse-safety.
+**Loses on, honestly:**
+- **No photo for markets that expect one** (CH/DE/JP). Deliberate, but a Swiss applicant
+  is genuinely not served.
+- **Fewer skeletons** than the big builders (7 vs Resume.io's ~38 named designs). More
+  *looks*, fewer *structures* — by choice, since structure carries the parse-safety.
+- **The full-bleed band is conventional, not novel.** It is the corpus's standard premium
+  gesture. This system does it correctly, not first.
 
-**Where it wins, and no template in the corpus does this:** it re-extracts the finished
-PDF and shows you the text a parser sees, then tells you when it broke. 153 templates
-were surveyed. **Not one of them verifies its own output.** Several assert
-ATS-friendliness while shipping layouts that measurably fabricate lines.
+**Wins on the only thing nobody else does:** it re-extracts the finished PDF and shows
+you the text a parser sees, then tells you when it broke. **177 templates surveyed. Not
+one verifies its own output.** Several assert ATS-friendliness while shipping layouts
+that measurably fabricate lines.
 
-The bar this system is trying to clear is not "looks as good as Enhancv." It is
-"is true."
+The bar is not "looks as good as Enhancv." It is **"is true."**

@@ -706,6 +706,50 @@ presets:
     heading_style: plain
     note: "Quiet and spacious. Muted accent, no rules, lots of air (teal, 9.1:1 on white)"
 
+  # --- mono: Monospace headings. Tabular by construction; reads engineering
+  mono-graphite:
+    template: modern
+    type: mono-head
+    density: normal
+    accent: "#2F3437"
+    heading_style: bar
+    note: "Monospace headings. Tabular by construction; reads engineering (graphite, 12.6:1 on white)"
+  mono-teal:
+    template: modern
+    type: mono-head
+    density: normal
+    accent: "#1F4E5F"
+    heading_style: bar
+    note: "Monospace headings. Tabular by construction; reads engineering (teal, 9.1:1 on white)"
+  mono-cobalt:
+    template: modern
+    type: mono-head
+    density: normal
+    accent: "#1A3E7A"
+    heading_style: bar
+    note: "Monospace headings. Tabular by construction; reads engineering (cobalt, 10.4:1 on white)"
+  mono-moss:
+    template: modern
+    type: mono-head
+    density: normal
+    accent: "#3A4A2F"
+    heading_style: bar
+    note: "Monospace headings. Tabular by construction; reads engineering (moss, 9.5:1 on white)"
+  mono-ink:
+    template: modern
+    type: mono-head
+    density: normal
+    accent: "#16181D"
+    heading_style: bar
+    note: "Monospace headings. Tabular by construction; reads engineering (ink, 17.8:1 on white)"
+  mono-steel:
+    template: modern
+    type: mono-head
+    density: normal
+    accent: "#3D5266"
+    heading_style: bar
+    note: "Monospace headings. Tabular by construction; reads engineering (steel, 8.1:1 on white)"
+
   # --- banded: Colour band with a serif body. Warm authority
   banded-oxblood:
     template: signature
@@ -754,8 +798,8 @@ presets:
     accent: "#16181D"
     band: "#16181D"
     heading_style: bar
-    note: "Colour band with a serif body. Warm authority (ink, 17.8:1 on white)"# accents: 24 | type pairings: 5
-# generated 107 presets
+    note: "Colour band with a serif body. Warm authority (ink, 17.8:1 on white)"# accents: 24 | type pairings: 6
+# generated 113 presets
 
 
-# 107 presets across 14 families.
+# 113 presets across 15 families.

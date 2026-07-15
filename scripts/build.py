@@ -147,6 +147,7 @@ def load_resume(path: Path) -> dict:
 # glyph procedures instead of real embedded text (see references/rendering.md).
 SERIF_STACK = '"Cambria", "Charter", "Bitstream Charter", "Palatino Linotype", Georgia, serif'
 SANS_STACK  = '"Segoe UI", "Helvetica Neue", "Calibri", "Lato", Arial, sans-serif'
+MONO_STACK  = '"Consolas", "SF Mono", "Menlo", "DejaVu Sans Mono", monospace'
 GEO_STACK   = '"Century Gothic", "Futura", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
 TYPE_PAIRS = {
     "sans":      {"body": SANS_STACK,  "head": SANS_STACK},
@@ -154,6 +155,10 @@ TYPE_PAIRS = {
     "mixed":     {"body": SERIF_STACK, "head": SANS_STACK},
     "mixed-alt": {"body": SANS_STACK,  "head": SERIF_STACK},
     "geometric": {"body": SANS_STACK,  "head": GEO_STACK},
+    # Mono is lining + tabular BY CONSTRUCTION -- no feature support needed, no
+    # figure-style trap. 1 of 177 surveyed templates does this: a differentiator,
+    # not table stakes. Strong signal for engineering roles.
+    "mono-head": {"body": SANS_STACK,  "head": MONO_STACK},
 }
 
 

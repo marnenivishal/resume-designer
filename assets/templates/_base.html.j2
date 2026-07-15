@@ -63,6 +63,14 @@ h2::after { content: none; }
 
 {% block header %}
 <header class="masthead">
+  {# monogram: the corpus's only answer to "what goes where the photo isn't".
+     Standard Resume uses it as its signature; Dribbble's John Doe monogram was the
+     one piece in 177 that SOLVED the photo problem rather than indulging it.
+     Parse-safe by this system's own test: it merges to "SR Maya Ellison" -- a line
+     that stays true. Set config.monogram: true, or to explicit initials. #}
+  {% if config.monogram %}
+  <div class="monogram">{% if config.monogram is string %}{{ config.monogram }}{% else %}{{ basics.name.split() | map('first') | join('') | upper }}{% endif %}</div>
+  {% endif %}
   <h1 class="name">{{ basics.name }}</h1>
   {% if basics.headline %}<div class="headline">{{ basics.headline }}</div>{% endif %}
   {% if contact_items %}
@@ -74,6 +82,26 @@ h2::after { content: none; }
 {% endblock %}
 
 {% block body %}
+{#- The org-drop threshold is a DOCUMENT decision, not a per-record one.
+
+    Bug this fixes: applied per record, a four-job resume rendered three entries as
+    "Role, Company .... 2021-2024" and the fourth as a two-line block -- two date
+    conventions in one document. That is precisely the defect the 153-template survey
+    holds against Canva's "Minimalist White and Grey". Consistency beats compactness:
+    if ANY record would wrap, every record adopts the dropped form.
+
+    The threshold is paper-dependent because it is measured in characters against a
+    text column: A4 is 6mm narrower than Letter, so it must be the tighter figure.
+    A constant measured in characters cannot be paper-independent. -#}
+{%- set _limit = 55 if page == 'a4' else 58 -%}
+{%- set _lens = [] -%}
+{%- for j in (experience or []) if j.company -%}
+  {%- set _ = _lens.append((j.role ~ ', ' ~ j.company) | length) -%}
+{%- endfor -%}
+{%- for e in (education or []) if e.institution -%}
+  {%- set _ = _lens.append((e.degree ~ ', ' ~ e.institution) | length) -%}
+{%- endfor -%}
+{%- set drop_org = (_lens | max) > _limit if _lens else false -%}
 
 {% if summary %}
 <section class="summary">
@@ -107,7 +135,7 @@ h2::after { content: none; }
        Canva splits between the two). See references/pattern-study.md section 3.
        Inline also sidesteps the wrap collision below entirely, since nothing is
        right-aligned to collide with. #}
-    {% set inline_org = job.company and (job.role ~ ', ' ~ job.company) | length <= 58 %}
+    {% set inline_org = job.company and not drop_org %}
     {% if config.date_style == 'inline' %}
     <div class="entry-head">
       <span class="role">{{ job.role }}</span>{% if job.company %}<span class="org-sep">, </span><span class="org">{{ job.company }}</span>{% endif %}<span class="meta inline-meta"><span class="dsep"> · </span>{% if job.location %}{{ job.location }}{% if job.start or job.end %} · {% endif %}{% endif %}{{ job | daterange }}</span>
@@ -153,7 +181,7 @@ h2::after { content: none; }
 <section>
   <h2>{{ labels.education | default('Education') }}</h2>
   {% for e in education %}
-  {% set inline_inst = e.institution and (e.degree ~ ', ' ~ e.institution) | length <= 58 %}
+  {% set inline_inst = e.institution and not drop_org %}
   <article class="entry edu">
     <div class="row">
       <div class="role">{{ e.degree }}{% if inline_inst %}<span class="org-sep">, </span><span class="org">{{ e.institution }}</span>{% endif %}</div>

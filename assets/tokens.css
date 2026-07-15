@@ -256,6 +256,28 @@ li::before {
 
 /* --- corpus-driven variants (see references/pattern-study.md) ---------------- */
 
+/* Monogram. Solves "what occupies the space where a photo would be" without a photo.
+   Inline-block beside the name, so it merges to "SR Maya Ellison" at extraction --
+   true, and harmless. Never a background image: that would be invisible to a parser
+   AND to a screen reader. */
+.monogram {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 9pt;
+  padding: 4pt 6pt;
+  min-width: 26pt;
+  text-align: center;
+  font-family: var(--font-head);
+  font-size: 12pt;
+  font-weight: var(--w-bold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--c-paper);
+  background: var(--c-accent);
+  border-radius: 3pt;
+}
+.masthead .name { display: inline-block; vertical-align: middle; }
+
 /* date_style: inline. Right-aligned dates are A convention, not THE convention:
    surveyed across 153 real templates, Adobe Express used right-aligned in 0 of 16
    and Canva split between the two. Inline keeps the date in the text flow, which

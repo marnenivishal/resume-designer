@@ -284,7 +284,7 @@ Refuse these, and say why:
 | Sidebar / two-column | `[MEASURED]` fabricates lines in the text stream (§2.1) |
 | Tables for layout | `[MEASURED]` worst performer; the "ATS-safe" advice is backwards |
 | Skill bars / dots / stars | invented precision, invisible to parsers, costs evidence space |
-| Icons for contact info | a glyph is not text; `✉` extracts as noise or nothing |
+| Icon **replacing** a contact label | Novorésumé does this in 12/12 templates — the glyph carries the meaning and a parser gets nothing. An icon *beside* text (`✉ jane@x.com`) is harmless: Rezi, the most parse-serious vendor surveyed, ships them 20/20. The rule is **never replace text**, not **never decorate**. |
 | Photo (US/UK/CA/AU) | legal exposure, zero signal |
 | Text inside images | invisible to extraction |
 | Headers/footers for contact | some parsers never read them; the page-1 masthead is free |

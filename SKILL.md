@@ -140,7 +140,7 @@ Enforced by `assets/tokens.css` and measured in `DESIGN.md`:
    same record (role + its dates, label + its values).
 2. **No skill bars, dots, or star ratings.** Invented precision, invisible to
    parsers, occupies the space evidence should.
-3. **No icons for contact details, no photo** (US/UK/CA/AU), **no text in images.**
+3. **An icon must never replace text** (a glyph beside `jane@x.com` is harmless; a glyph *instead of* the label is not — Novorésumé does this in 12/12). **No photo** (US/UK/CA/AU), **no text in images.**
 4. **Standard section headings.** `Experience`, not `Where I've Made Impact`.
 5. **One accent colour**, three uses maximum. All text ≥ 4.5:1 contrast.
 6. Never hard-code a value `tokens.css` defines.

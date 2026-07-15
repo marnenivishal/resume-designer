@@ -29,7 +29,7 @@ python scripts/build.py resume.yaml --format pdf,docx,txt --check
 python scripts/ats_check.py Resume.pdf --data resume.yaml
 
 # other things you'll want
-python scripts/build.py --list-presets                    # 107 named looks
+python scripts/build.py --list-presets                    # 113 named looks
 python scripts/build.py resume.yaml --preset material-blue
 python scripts/build.py resume.yaml --fit                 # compress to max_pages
 python scripts/extract.py old_resume.pdf -o resume.yaml   # import an existing resume
@@ -69,7 +69,9 @@ describe it as fine.
   parsers, and they occupy the space evidence should. (Surveyed: 21+ of 153 commercial
   templates ship them; Kickresume's `Pipeline` asserts "72% Teamwork" — against what
   scale? Figma Community has already abandoned them: 0 of 14.)
-- **Do not add icons for contact details or a photo** (US/UK/CA/AU).
+- **Never let an icon replace text.** Beside text it is harmless (Rezi ships contact
+  glyphs 20/20); *instead of* a label it hands the parser nothing (Novorésumé, 12/12).
+- **No photo** (US/UK/CA/AU).
 - **Do not hard-code values** that `assets/tokens.css` defines.
 - **Do not repeat the "75% of resumes are auto-rejected by bots" claim.** It traces to
   a vendor that went out of business in 2013 without publishing a study. See
@@ -83,7 +85,7 @@ describe it as fine.
 | `SKILL.md` | the end-to-end workflow (written for Claude, useful to any agent) |
 | `assets/tokens.css` | every number. Change here, never in a template. |
 | `assets/templates/` | `_base.html.j2` owns structure; variants override `style` only |
-| `assets/presets.yaml` | 107 named looks. Generated — edit `scripts/gen_presets.py` |
+| `assets/presets.yaml` | 113 named looks. Generated — edit `scripts/gen_presets.py` |
 | `references/content.md` | bullet formulas, banned phrases, gaps, career changes |
 | `references/variants.md` | region + industry rules (several are legal-adjacent) |
 | `references/review.md` | the quality bar. Run it before delivering. |

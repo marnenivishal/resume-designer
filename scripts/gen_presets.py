@@ -68,6 +68,7 @@ ACCENTS = {
 # Chrome emit Type3 glyph procedures instead of real embedded text.
 SERIF = '"Cambria", "Charter", "Bitstream Charter", "Palatino Linotype", Georgia, serif'
 SANS  = '"Segoe UI", "Helvetica Neue", "Calibri", "Lato", Arial, sans-serif'
+MONO  = '"Consolas", "SF Mono", "Menlo", "DejaVu Sans Mono", monospace'
 GEO   = '"Century Gothic", "Futura", "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif'
 
 TYPE = {
@@ -76,6 +77,7 @@ TYPE = {
     "mixed":     {"body": SERIF, "head": SANS},   # serif body, sans headings
     "mixed-alt": {"body": SANS,  "head": SERIF},  # sans body, serif headings
     "geometric": {"body": SANS,  "head": GEO},
+    "mono-head": {"body": SANS,  "head": MONO},
 }
 
 # --- families ----------------------------------------------------------------
@@ -123,6 +125,12 @@ FAMILIES = [
     dict(prefix="nordic", template="modern", type="geometric", density="airy",
          heading_style="plain", note="Quiet and spacious. Muted accent, no rules, lots of air",
          accents=["steel","slate","pine","moss","graphite","teal"]),
+    # 1 of 177 surveyed templates differentiates on a monospace face alone (Standard
+    # Resume 'Keefer'). Mono is lining+tabular by construction: zero figure-style risk,
+    # perfect date rail. A differentiator rather than table stakes.
+    dict(prefix="mono", template="modern", type="mono-head", density="normal",
+         heading_style="bar", note="Monospace headings. Tabular by construction; reads engineering",
+         accents=["graphite","teal","cobalt","moss","ink","steel"]),
     dict(prefix="banded", template="signature", type="serif", density="normal",
          heading_style="bar", note="Colour band with a serif body. Warm authority",
          accents=["oxblood","burgundy","bronze","pine","navy","ink"]),
